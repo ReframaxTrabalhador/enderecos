@@ -1,2 +1,2 @@
-# enderecos
-site para cadastro de endereços
+# Suprimentos
+site para cadastro de saidas de suprimentos
