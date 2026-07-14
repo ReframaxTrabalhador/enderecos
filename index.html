@@ -1,341 +1,760 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR" data-theme="dark">
 <head>
-  <base target="_top">
-  <meta charset="UTF-8">
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f2f4f7;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
-    .card {
-      background: #fff;
-      max-width: 480px;
-      width: 92%;
-      margin-top: 40px;
-      padding: 32px 28px;
-      border-radius: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    h1 { font-size: 20px; color: #1a1a1a; margin: 0 0 6px; }
-    p.sub { color: #666; font-size: 14px; margin: 0 0 24px; }
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 6px;
-      margin-top: 14px;
-    }
-    input, select {
-      width: 100%;
-      padding: 11px 12px;
-      border: 1px solid #d5d9e0;
-      border-radius: 8px;
-      font-size: 15px;
-      outline: none;
-    }
-    input:focus, select:focus { border-color: #2f6feb; }
-    button {
-      width: 100%;
-      margin-top: 22px;
-      padding: 13px;
-      background: #2f6feb;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    button:hover { background: #2557c7; }
-    button:disabled { background: #a9bde3; cursor: not-allowed; }
-    .row2 { display: flex; gap: 12px; }
-    .row2 > div { flex: 1; }
-    .msg {
-      margin-top: 14px;
-      font-size: 14px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      display: none;
-    }
-    .msg.erro { background: #fdecea; color: #b3261e; display: block; }
-    .msg.sucesso { background: #e6f4ea; color: #1e7e34; display: block; }
-    .colaborador {
-      background: #f0f5ff;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #1a3b8f;
-      margin-top: 16px;
-    }
-    .hidden { display: none; }
-    .spinner {
-      display: none;
-      text-align: center;
-      margin-top: 14px;
-      font-size: 13px;
-      color: #888;
-    }
-    .voltar {
-      background: none;
-      color: #2f6feb;
-      font-weight: 500;
-      margin-top: 10px;
-      padding: 6px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lançamentos · Suprimentos</title>
+<base target="_top">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root, [data-theme="dark"]{
+    --bg:#0A1018; --surface:#111926; --surface-2:#182233; --surface-3:#1E2A3E;
+    --ink:#E7ECF3; --ink-soft:#9FADC0; --ink-faint:#6B7A8D;
+    --line:#233047; --line-strong:#324058;
+    --steel-dark:#070B12; --steel-dark-2:#0D1420; --steel:#6E9BC4; --steel-soft:#1B2A3D;
+    --ember:#E8563D; --ember-soft:#3A2019; --ember-text:#FF8A6E;
+    --teal:#37C489; --teal-soft:#123528; --teal-text:#5CE0A8;
+    --amber:#E0AC3E; --amber-soft:#3A2E10;
+    --radius:10px; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    --font-display:'Space Grotesk', system-ui, sans-serif; --font-body:'Inter', system-ui, sans-serif; --font-mono:'IBM Plex Mono', ui-monospace, monospace;
+  }
+  [data-theme="light"]{
+    --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#F5F7F9; --surface-3:#EBEFF3;
+    --ink:#12181F; --ink-soft:#57626D; --ink-faint:#8A939C;
+    --line:#DDE3E8; --line-strong:#C7CFD6;
+    --steel-dark:#141B22; --steel-dark-2:#1D2630; --steel:#31506C; --steel-soft:#E7EDF1;
+    --ember:#C1440E; --ember-soft:#FBEAE1; --ember-text:#8f3308;
+    --teal:#1F7A5C; --teal-soft:#E1F0EA; --teal-text:#155c45;
+    --amber:#9C6B07; --amber-soft:#FBF1DC;
+    --shadow:0 1px 2px rgba(20,27,34,.06), 0 4px 16px rgba(20,27,34,.05);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:14px; line-height:1.45; -webkit-font-smoothing:antialiased; }
+  body,.card,.btn,input,select,textarea{ transition:background-color .15s ease, color .15s ease, border-color .15s ease; }
+
+  .app-header{ position:sticky; top:0; z-index:20; background:linear-gradient(180deg, var(--steel-dark-2), var(--steel-dark)); color:#fff; padding:12px 18px; }
+  .app-header-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .app-header-left{ display:flex; align-items:center; gap:10px; }
+  .app-icon{ width:32px; height:32px; border-radius:8px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; font-size:16px; flex:none; }
+  .app-title{ font-family:var(--font-display); font-weight:700; font-size:15.5px; margin:0; }
+  .app-subtitle{ font-size:11px; color:#8FA0B3; margin:1px 0 0; font-family:var(--font-mono); }
+  .btn-icon{ background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); color:#fff; border-radius:8px; padding:7px 10px; font-size:14px; cursor:pointer; }
+  .ember-bar{ height:3px; background:linear-gradient(90deg,#7A2C09,var(--ember),#E0923F,var(--ember),#7A2C09); }
+
+  main{ max-width:1100px; margin:0 auto; padding:18px 20px 60px; }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 20px; margin-bottom:16px; }
+  .card h2{ font-family:var(--font-display); font-size:15px; margin:0 0 14px; display:flex; align-items:center; gap:8px; }
+
+  label{ display:block; font-size:12px; font-weight:600; color:var(--ink-soft); margin:12px 0 5px; }
+  label:first-of-type{ margin-top:0; }
+  .campo label{ margin:0 0 5px; }
+  input, select, textarea{
+    width:100%; padding:10px 11px; border-radius:8px; border:1px solid var(--line-strong);
+    background:var(--surface-2); color:var(--ink); font-family:var(--font-body); font-size:14px;
+  }
+  input:focus, select:focus, textarea:focus{ outline:2px solid var(--steel); outline-offset:1px; }
+  textarea{ resize:vertical; min-height:52px; }
+
+  /* Grid horizontal para o formulário — cada .campo é label+input; .full ocupa a largura toda */
+  .form-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:14px 16px; align-items:end; }
+  .campo{ display:flex; flex-direction:column; }
+  .campo.full{ grid-column:1 / -1; }
+  .row2{ display:flex; gap:10px; }
+  .row2 > div{ flex:1; min-width:0; }
+
+  .sugestao{ display:flex; align-items:center; gap:8px; margin-top:6px; font-size:12px; padding:7px 10px; border-radius:8px; }
+  .sugestao.ok{ background:var(--teal-soft); color:var(--teal-text); }
+  .sugestao.duvida{ background:var(--amber-soft); color:var(--amber); }
+  .sugestao.vazio{ display:none; }
+
+  button.btn-submit{
+    width:100%; margin-top:16px; padding:13px; background:var(--ember); color:#fff; border:none;
+    border-radius:8px; font-weight:700; font-size:14.5px; cursor:pointer; font-family:var(--font-body);
+  }
+  button.btn-submit:hover{ filter:brightness(1.08); }
+  button.btn-submit:disabled{ opacity:.5; cursor:not-allowed; }
+
+  .msg{ margin-top:10px; font-size:12.5px; padding:8px 10px; border-radius:8px; display:none; }
+  .msg.erro{ background:var(--ember-soft); color:var(--ember-text); display:block; }
+  .msg.sucesso{ background:var(--teal-soft); color:var(--teal-text); display:block; }
+
+  .kpi-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .kpi{ flex:1; min-width:130px; background:var(--surface-2); border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+  .kpi-label{ font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); font-weight:600; }
+  .kpi-value{ font-family:var(--font-mono); font-size:18px; font-weight:600; margin-top:3px; }
+
+  table.tbl{ width:100%; border-collapse:collapse; font-size:12px; }
+  table.tbl th{ text-align:left; font-size:10.5px; text-transform:uppercase; color:var(--ink-faint); padding:6px 8px; border-bottom:2px solid var(--line-strong); }
+  table.tbl td{ padding:6px 8px; border-bottom:1px solid var(--line); font-family:var(--font-mono); }
+  table.tbl td.txt{ font-family:var(--font-body); }
+  table.tbl tbody tr:hover{ background:var(--steel-soft); }
+  .valor-col{ text-align:right; white-space:nowrap; }
+  .btn-del{ background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:13px; padding:2px 6px; }
+  .btn-del:hover{ color:var(--ember-text); }
+  .empty-state{ padding:16px; text-align:center; color:var(--ink-faint); font-size:12.5px; }
+
+  .footnote{ font-size:11px; color:var(--ink-faint); margin-top:8px; }
+  .hidden{ display:none; }
+
+  #cardLogin{ max-width:420px; margin:32px auto 0; }
+
+  .upload-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .progress-track{ background:var(--surface-2); border-radius:6px; height:8px; overflow:hidden; margin-top:8px; display:none; }
+  .progress-fill{ height:100%; background:var(--ember); width:0%; transition:width .2s ease; }
+
+  @media (max-width: 640px){
+    main{ padding:14px 12px 40px; }
+    .card{ padding:14px 16px; }
+    #cardLogin{ margin-top:12px; }
+    .form-grid{ grid-template-columns:1fr; }
+  }
+</style>
 </head>
 <body>
-  <div class="card">
 
-    <!-- ETAPA 1: MATRÍCULA -->
-    <div id="etapa1">
-      <h1>Atualização de Endereço</h1>
-      <p class="sub">Informe sua matrícula (RM) para continuar.</p>
+<header class="app-header">
+  <div class="app-header-row">
+    <div class="app-header-left">
+      <span class="app-icon">📝</span>
+      <div>
+        <p class="app-title">Lançamentos · Suprimentos</p>
+        <p class="app-subtitle" id="subtitulo">carregando…</p>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span class="app-subtitle" id="nomeLogadoWrap" style="display:none;">👤 <span id="nomeLogado"></span> · <a href="#" id="btnSair" style="color:#8FA0B3;">sair</a></span>
+      <button class="btn-icon" id="btnTema" title="Alternar tema">☀️</button>
+    </div>
+  </div>
+</header>
+<div class="ember-bar"></div>
 
-      <label for="matricula">Matrícula (RM)</label>
-      <input type="text" id="matricula" placeholder="Ex: 139049" inputmode="numeric">
+<main>
 
-      <button id="btnBuscar" onclick="buscar()">Continuar</button>
+  <div class="card" id="cardLogin">
+    <h2>🔒 Acesso ao sistema</h2>
+    <p class="footnote" style="margin-bottom:12px;">Acesso restrito aos grupos Suprimentos, Almoxarifado, Gestão e Planejamento.</p>
 
-      <div class="spinner" id="spinner1">Verificando...</div>
-      <div class="msg erro" id="erro1"></div>
+    <label for="loginMatricula">Matrícula</label>
+    <input id="loginMatricula" inputmode="numeric" placeholder="Sua matrícula (RM)">
+
+    <label for="loginSenha">Senha</label>
+    <input id="loginSenha" type="password" placeholder="Sua senha">
+
+    <button class="btn-submit" id="btnLogin">Entrar</button>
+    <div class="msg" id="msgLogin"></div>
+
+    <p class="footnote" style="text-align:center; margin-top:12px;">
+      <a href="#" id="linkCriarSenha" style="color:var(--steel);">Primeiro acesso? Criar senha</a>
+    </p>
+
+    <div id="blocoCriarSenha" class="hidden" style="margin-top:6px; border-top:1px solid var(--line); padding-top:14px;">
+      <p class="footnote" style="margin-bottom:8px;">Informe sua matrícula acima e crie sua senha:</p>
+      <label for="novaSenha">Nova senha (mín. 4 caracteres)</label>
+      <input id="novaSenha" type="password">
+      <label for="confirmaSenha">Confirmar nova senha</label>
+      <input id="confirmaSenha" type="password">
+      <button class="btn-submit" id="btnCriarSenha">Criar senha e entrar</button>
+    </div>
+  </div>
+
+  <div id="conteudoPrincipal" class="hidden">
+
+    <div class="card">
+      <h2>📊 Resumo do mês corrente</h2>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-label">Total lançado</div><div class="kpi-value" id="kpiTotalMes">—</div></div>
+        <div class="kpi"><div class="kpi-label">Lançamentos</div><div class="kpi-value" id="kpiCountMes">—</div></div>
+        <div class="kpi"><div class="kpi-label">Hoje</div><div class="kpi-value" id="kpiHoje">—</div></div>
+      </div>
     </div>
 
-    <!-- ETAPA 2: ENDEREÇO -->
-    <div id="etapa2" class="hidden">
-      <h1>Confirme seu endereço</h1>
-      <div class="colaborador" id="nomeColaborador"></div>
+    <div class="card">
+      <h2>➕ Nova despesa prevista</h2>
 
-      <label for="cep">CEP</label>
-      <input type="text" id="cep" placeholder="00000-000" inputmode="numeric" maxlength="9" oninput="onCepInput(this)">
-      <div class="spinner" id="cepStatus" style="text-align:left; margin-top:6px;"></div>
-
-      <label for="logradouro">Rua / Avenida</label>
-      <input type="text" id="logradouro" placeholder="Ex: Rua das Flores">
-
-      <div class="row2">
-        <div>
-          <label for="numero">Número</label>
-          <input type="text" id="numero" placeholder="Ex: 123">
+      <div class="form-grid">
+        <div class="campo">
+          <label for="lancadoPor">Lançado por</label>
+          <input id="lancadoPor" readonly style="opacity:.75; cursor:not-allowed;">
         </div>
-        <div>
-          <label for="complemento">Complemento</label>
-          <input type="text" id="complemento" placeholder="Apto, bloco...">
+        <div class="campo">
+          <label for="dataPrevista">Data de pagamento *</label>
+          <input type="date" id="dataPrevista">
+        </div>
+        <div class="campo">
+          <label for="valor">Valor previsto (R$) *</label>
+          <input type="number" id="valor" step="0.01" min="0" placeholder="0,00">
+        </div>
+        <div class="campo">
+          <label for="fornecedor">Fornecedor</label>
+          <input id="fornecedor" placeholder="Ex: Amil, Ternium...">
+        </div>
+        <div class="campo">
+          <label for="grupoMacro">Grupo de conta *</label>
+          <select id="grupoMacro"></select>
+        </div>
+
+        <div class="campo full">
+          <label for="descricao">Descrição da despesa *</label>
+          <textarea id="descricao" placeholder="Ex: compra de luvas de proteção para a equipe de soldadores"></textarea>
+          <div class="sugestao vazio" id="sugestaoBox"></div>
+        </div>
+
+        <div class="campo full">
+          <label for="observacao">Observação</label>
+          <input id="observacao" placeholder="Opcional">
         </div>
       </div>
 
-      <label for="bairro">Bairro</label>
-      <input type="text" id="bairro" placeholder="Ex: Centro">
-
-      <div class="row2">
-        <div>
-          <label for="cidade">Cidade</label>
-          <input type="text" id="cidade" placeholder="Ex: São Paulo">
-        </div>
-        <div>
-          <label for="estado">Estado (UF)</label>
-          <input type="text" id="estado" maxlength="2" placeholder="Ex: SP">
-        </div>
-      </div>
-
-      <button id="btnSalvar" onclick="salvar()">Salvar Endereço</button>
-      <button class="voltar" onclick="voltar()">Voltar</button>
-
-      <div class="spinner" id="spinner2">Salvando...</div>
-      <div class="msg erro" id="erro2"></div>
+      <button class="btn-submit" id="btnLancar">Lançar despesa</button>
+      <div class="msg" id="msgForm"></div>
     </div>
 
-    <!-- ETAPA 3: SUCESSO -->
-    <div id="etapa3" class="hidden">
-      <h1>Endereço atualizado! ✅</h1>
-      <p class="sub" id="msgSucesso"></p>
-      <button onclick="location.reload()">Atualizar outro endereço</button>
+    <div class="card">
+      <h2>📦 Lançamento em lote (planilha Excel)</h2>
+      <p class="footnote" style="margin-bottom:10px;">Baixe o modelo, preencha só <b>Descrição, Data, Valor e Fornecedor</b> — o sistema classifica o grupo de conta e envia cada linha automaticamente.</p>
+
+      <div class="upload-row">
+        <button class="btn-submit" id="btnBaixarModelo" style="width:auto; margin-top:0;">⬇ Baixar modelo (Excel)</button>
+        <button class="btn-submit" id="btnEnviarPlanilha" style="width:auto; margin-top:0; background:var(--steel);">📤 Enviar planilha preenchida</button>
+        <input type="file" id="inputPlanilhaLote" accept=".xlsx,.xls" class="hidden">
+      </div>
+
+      <div class="progress-track" id="progressoLoteTrack"><div class="progress-fill" id="progressoLoteFill"></div></div>
+      <div class="msg" id="msgLote"></div>
+      <div id="resumoLoteWrap"></div>
+    </div>
+
+    <div class="card">
+      <h2>🕘 Últimos lançamentos</h2>
+      <div id="tabelaRecentesWrap"></div>
+      <p class="footnote">Mostrando os lançamentos mais recentes. Esses valores são uma <b>previsão</b> — os dados oficiais/fidelizados substituem esta base quando o período for consolidado no sistema contábil.</p>
     </div>
 
   </div>
 
-  <script>
-    // URL do Web App (implantação atual).
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby0vpF1uUTCzZ3AXwTJF_FdBkgBhuCxQV7gXLrVwxQgqr3vdK2qO6y6MgyL7-ls-4WP/exec";
-    const TIMEOUT_MS = 15000;
+</main>
 
-    let matriculaAtual = null;
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script id="classificador-dados" type="application/json">{"ADRIANA": ["09. Escritório e Hospedagem", 0.615, 39], "PESSOA": ["09. Escritório e Hospedagem", 1.0, 20], "IMOVEL": ["09. Escritório e Hospedagem", 1.0, 20], "ALUGUEL": ["09. Escritório e Hospedagem", 0.769, 26], "IMOVEIS": ["09. Escritório e Hospedagem", 0.625, 56], "DIAS": ["09. Escritório e Hospedagem", 0.615, 39], "JURIDICA": ["09. Escritório e Hospedagem", 1.0, 13], "BARAO": ["07. Equipamentos e Locações", 0.8, 25], "CONTRIBUICOES": ["16. Gastos Gerais", 1.0, 17], "SIND": ["16. Gastos Gerais", 1.0, 16], "SINDICATOS": ["16. Gastos Gerais", 1.0, 17], "SIDERURGICA": ["16. Gastos Gerais", 1.0, 16], "CONSELHOS": ["16. Gastos Gerais", 1.0, 17], "MUNICIPIO": ["16. Gastos Gerais", 1.0, 16], "EMPRESAS": ["16. Gastos Gerais", 1.0, 16], "EMPREG": ["16. Gastos Gerais", 1.0, 16], "CARGA": ["11. Fretes e Carretos", 1.0, 12], "TERCEIROS": ["11. Fretes e Carretos", 0.578, 405], "FRETES": ["11. Fretes e Carretos", 1.0, 234], "CARRETO": ["11. Fretes e Carretos", 1.0, 234], "TRUCK": ["11. Fretes e Carretos", 1.0, 6], "DEDE": ["11. Fretes e Carretos", 1.0, 14], "VEICULOS": ["07. Equipamentos e Locações", 0.75, 168], "EQUIPAMENTOS": ["07. Equipamentos e Locações", 0.91, 1438], "EQUIPTOS": ["07. Equipamentos e Locações", 0.947, 133], "LUBRIFICACAO": ["07. Equipamentos e Locações", 1.0, 126], "ELETRO": ["14. Materiais", 0.706, 51], "LIMPEZA": ["14. Materiais", 0.584, 303], "TECNICA": ["07. Equipamentos e Locações", 0.667, 3], "REVISAO": ["07. Equipamentos e Locações", 1.0, 126], "CONSERVACAO": ["07. Equipamentos e Locações", 0.887, 142], "MANUT": ["07. Equipamentos e Locações", 1.0, 126], "CONSERTO": ["07. Equipamentos e Locações", 1.0, 126], "MANUTENCAO": ["07. Equipamentos e Locações", 0.859, 262], "MAQUINAS": ["07. Equipamentos e Locações", 1.0, 571], "SACO": ["14. Materiais", 1.0, 34], "CONSUMO": ["14. Materiais", 1.0, 573], "MATERIAL": ["14. Materiais", 0.701, 1637], "S10": ["07. Equipamentos e Locações", 1.0, 459], "PETROLEO": ["07. Equipamentos e Locações", 0.648, 715], "DERIV": ["07. Equipamentos e Locações", 0.666, 689], "COMBUSTIVEL": ["07. Equipamentos e Locações", 0.959, 750], "DIMOCOSTAS": ["07. Equipamentos e Locações", 0.666, 689], "OLEO": ["07. Equipamentos e Locações", 0.998, 464], "ABREU": ["07. Equipamentos e Locações", 0.666, 689], "DIESEL": ["07. Equipamentos e Locações", 1.0, 468], "SBAMTUBOS": ["14. Materiais", 1.0, 7], "FILME": ["14. Materiais", 1.0, 7], "MAQUINA": ["07. Equipamentos e Locações", 0.741, 27], "STRETCH": ["14. Materiais", 1.0, 7], "HOTEIS": ["09. Escritório e Hospedagem", 1.0, 28], "TEMPORADA": ["09. Escritório e Hospedagem", 1.0, 28], "QUALQUER": ["09. Escritório e Hospedagem", 0.609, 46], "HOSPEDAGEM": ["09. Escritório e Hospedagem", 1.0, 28], "OCUPACAO": ["09. Escritório e Hospedagem", 1.0, 28], "HOTEL": ["09. Escritório e Hospedagem", 1.0, 13], "FORNEC": ["09. Escritório e Hospedagem", 1.0, 28], "NATUREZA": ["09. Escritório e Hospedagem", 0.622, 45], "ALO": ["09. Escritório e Hospedagem", 1.0, 28], "PACHECO": ["05. Saúde", 0.812, 16], "FARMACIA": ["05. Saúde", 1.0, 26], "CONVENIO": ["05. Saúde", 1.0, 138], "DROGARIAS": ["05. Saúde", 0.812, 16], "DESPESA": ["04. Transporte de Pessoal", 1.0, 17], "CAPPELLO": ["04. Transporte de Pessoal", 1.0, 16], "MONTAGENS": ["04. Transporte de Pessoal", 1.0, 16], "ASSESSORIA": ["04. Transporte de Pessoal", 0.552, 29], "VIAGEM": ["04. Transporte de Pessoal", 0.987, 78], "GERENCIAMENTO": ["04. Transporte de Pessoal", 1.0, 16], "DESPESAS": ["04. Transporte de Pessoal", 0.614, 140], "ANDAIMES": ["07. Equipamentos e Locações", 1.0, 8], "ESCORAMENTOS": ["07. Equipamentos e Locações", 1.0, 8], "FORMAS": ["07. Equipamentos e Locações", 1.0, 8], "BASICA": ["06. Alimentação", 1.0, 88], "CESTA": ["06. Alimentação", 1.0, 88], "PLUXEE": ["06. Alimentação", 1.0, 89], "BENEFICIOS": ["06. Alimentação", 1.0, 74], "PROGRAMA": ["10. Serviços de Terceiros", 0.817, 82], "CESSAO": ["10. Serviços de Terceiros", 1.0, 67], "COMPUTACAO": ["10. Serviços de Terceiros", 1.0, 56], "LICENCIAMENTO": ["10. Serviços de Terceiros", 0.848, 79], "USO": ["10. Serviços de Terceiros", 0.882, 76], "SELBETTI": ["07. Equipamentos e Locações", 0.632, 19], "DIREITO": ["10. Serviços de Terceiros", 1.0, 67], "MILLS": ["07. Equipamentos e Locações", 0.944, 36], "ESTRUTURAS": ["07. Equipamentos e Locações", 1.0, 10], "ENGENHARIA": ["07. Equipamentos e Locações", 0.588, 17], "PLATAFORMA": ["07. Equipamentos e Locações", 1.0, 38], "RESTAURANTE": ["06. Alimentação", 1.0, 7], "ALIMENTACAO": ["06. Alimentação", 1.0, 319], "SABORES": ["06. Alimentação", 1.0, 7], "MAVI": ["06. Alimentação", 1.0, 7], "REFEICAO": ["06. Alimentação", 1.0, 184], "CASEIRA": ["06. Alimentação", 1.0, 25], "RECANTO": ["06. Alimentação", 1.0, 25], "PATY": ["06. Alimentação", 1.0, 25], "COMIDA": ["06. Alimentação", 1.0, 25], "ACESSORIOS": ["07. Equipamentos e Locações", 0.99, 292], "SOLDAS": ["07. Equipamentos e Locações", 0.976, 297], "APY": ["07. Equipamentos e Locações", 0.85, 20], "ITALIMP": ["14. Materiais", 0.966, 59], "SCOTH": ["14. Materiais", 1.0, 3], "BAZAR": ["14. Materiais", 0.614, 241], "ESPONJA": ["14. Materiais", 1.0, 3], "FACE": ["14. Materiais", 0.714, 7], "DUPLA": ["14. Materiais", 0.559, 34], "BRITE": ["14. Materiais", 1.0, 3], "LTS": ["06. Alimentação", 0.582, 67], "LITROS": ["14. Materiais", 0.729, 59], "UND": ["14. Materiais", 1.0, 42], "ECOLOGICO": ["14. Materiais", 1.0, 30], "COR": ["14. Materiais", 0.949, 59], "LIXO": ["14. Materiais", 1.0, 30], "PRETA": ["14. Materiais", 1.0, 5], "PCT": ["14. Materiais", 1.0, 68], "PLASTICO": ["14. Materiais", 1.0, 41], "MTS": ["13. Ferramentas e Utensílios", 0.704, 27], "FERRAMENTAS": ["13. Ferramentas e Utensílios", 1.0, 306], "PEQUENAS": ["13. Ferramentas e Utensílios", 1.0, 306], "CABO": ["14. Materiais", 0.855, 159], "PRENSA": ["14. Materiais", 0.75, 12], "ALUMINIO": ["14. Materiais", 0.581, 31], "ROSCA": ["07. Equipamentos e Locações", 0.621, 58], "FORJASUL": ["13. Ferramentas e Utensílios", 1.0, 3], "APLICACAO": ["14. Materiais", 1.0, 6], "ACO": ["14. Materiais", 0.664, 131], "COMP": ["16. Gastos Gerais", 0.652, 46], "PARAFUSO": ["14. Materiais", 0.929, 28], "TOTVS": ["10. Serviços de Terceiros", 0.947, 38], "JACAREPAGUA": ["07. Equipamentos e Locações", 1.0, 14], "HORIZONTE": ["05. Saúde", 0.659, 41], "CONTAINER": ["07. Equipamentos e Locações", 1.0, 41], "REFEICOES": ["06. Alimentação", 0.642, 95], "WASH": ["06. Alimentação", 1.0, 10], "COMEMORACOES": ["16. Gastos Gerais", 1.0, 54], "EVENTOS": ["16. Gastos Gerais", 1.0, 54], "SUPERIOR": ["14. Materiais", 1.0, 16], "CAIXA": ["14. Materiais", 0.829, 41], "ACOPLADA": ["14. Materiais", 1.0, 18], "UNIVERSAL": ["14. Materiais", 1.0, 25], "ACIONAMENTO": ["14. Materiais", 0.6, 25], "KIT": ["14. Materiais", 0.857, 28], "CONDOR": ["13. Ferramentas e Utensílios", 1.0, 29], "CORTE": ["13. Ferramentas e Utensílios", 0.556, 63], "BICO": ["13. Ferramentas e Utensílios", 0.947, 38], "MACARICO": ["13. Ferramentas e Utensílios", 0.9, 40], "ECO": ["14. Materiais", 1.0, 29], "ESMALTE": ["14. Materiais", 1.0, 29], "BASE": ["14. Materiais", 0.953, 43], "TINTA": ["14. Materiais", 1.0, 69], "SHERWIN": ["14. Materiais", 1.0, 39], "DEL": ["14. Materiais", 0.773, 44], "WILLIAMS": ["14. Materiais", 1.0, 39], "REI": ["14. Materiais", 0.773, 44], "DIGITAL": ["04. Transporte de Pessoal", 0.75, 28], "VALE": ["04. Transporte de Pessoal", 1.0, 110], "BILHETE": ["04. Transporte de Pessoal", 0.778, 27], "CBD": ["04. Transporte de Pessoal", 0.778, 27], "SEGURANCA": ["12. EPIs e Uniformes", 0.929, 496], "ESMETRO": ["07. Equipamentos e Locações", 1.0, 22], "ASSISTENCIA": ["05. Saúde", 0.994, 176], "METROLOGIA": ["07. Equipamentos e Locações", 1.0, 26], "LANCHE": ["06. Alimentação", 0.818, 44], "TREINAMENTO": ["16. Gastos Gerais", 1.0, 25], "ARENA": ["07. Equipamentos e Locações", 1.0, 11], "TRUK": ["07. Equipamentos e Locações", 1.0, 11], "AUTOMOTIVOS": ["07. Equipamentos e Locações", 0.875, 24], "PRENSAGEM": ["07. Equipamentos e Locações", 1.0, 7], "CAPA": ["07. Equipamentos e Locações", 0.7, 20], "NPT": ["07. Equipamentos e Locações", 1.0, 6], "ESPIGAO": ["07. Equipamentos e Locações", 0.571, 7], "MACHO": ["14. Materiais", 0.708, 24], "BSP": ["07. Equipamentos e Locações", 0.824, 34], "LATAO": ["07. Equipamentos e Locações", 0.765, 17], "EXTERNA": ["07. Equipamentos e Locações", 0.625, 8], "ISOPAK": ["14. Materiais", 0.935, 230], "GARRAFA": ["13. Ferramentas e Utensílios", 1.0, 16], "DESCARTAVEIS": ["14. Materiais", 0.804, 275], "COSTA": ["14. Materiais", 0.773, 278], "RODO": ["14. Materiais", 1.0, 15], "IMPERIO": ["14. Materiais", 1.0, 10], "VASSOURA": ["14. Materiais", 1.0, 19], "PIACAVA": ["14. Materiais", 1.0, 10], "GARI": ["14. Materiais", 1.0, 8], "TIPO": ["14. Materiais", 0.61, 59], "LIQUIDO": ["14. Materiais", 1.0, 11], "SABONETE": ["14. Materiais", 1.0, 4], "DESINFETANTE": ["14. Materiais", 1.0, 15], "MARINA": ["14. Materiais", 1.0, 13], "CLORO": ["14. Materiais", 1.0, 13], "YPE": ["14. Materiais", 1.0, 5], "NEUTRO": ["14. Materiais", 1.0, 7], "DETERGENTE": ["14. Materiais", 1.0, 5], "ALVEJADO": ["14. Materiais", 1.0, 12], "PANO": ["14. Materiais", 1.0, 13], "CHAO": ["14. Materiais", 1.0, 11], "INTEXTIL": ["14. Materiais", 1.0, 11], "MULTIUSO": ["14. Materiais", 1.0, 14], "LIMPADOR": ["14. Materiais", 1.0, 13], "VEJA": ["14. Materiais", 1.0, 13], "PAPEL": ["14. Materiais", 1.0, 57], "FARDO": ["14. Materiais", 1.0, 4], "HIGIENICO": ["14. Materiais", 1.0, 7], "ROLOS": ["14. Materiais", 1.0, 6], "DISPENSER": ["14. Materiais", 1.0, 5], "TRADICIONAL": ["14. Materiais", 1.0, 15], "PILAO": ["14. Materiais", 1.0, 15], "ACUCAR": ["14. Materiais", 1.0, 13], "REFINADO": ["14. Materiais", 1.0, 13], "COPO": ["14. Materiais", 0.925, 40], "BRANCO": ["14. Materiais", 0.92, 100], "LEITOSO": ["14. Materiais", 1.0, 22], "OXIGENIO": ["07. Equipamentos e Locações", 0.798, 173], "GASOSO": ["07. Equipamentos e Locações", 1.0, 127], "GASES": ["07. Equipamentos e Locações", 0.925, 295], "EDEN": ["07. Equipamentos e Locações", 0.989, 276], "DISSOLVIDO": ["07. Equipamentos e Locações", 1.0, 115], "ACETILENO": ["07. Equipamentos e Locações", 0.815, 173], "OFICINA": ["07. Equipamentos e Locações", 1.0, 5], "MOTOR": ["07. Equipamentos e Locações", 0.933, 15], "SANTOS": ["04. Transporte de Pessoal", 0.643, 14], "MECANICA": ["07. Equipamentos e Locações", 1.0, 5], "COD": ["07. Equipamentos e Locações", 0.778, 18], "BRASIF": ["07. Equipamentos e Locações", 0.833, 6], "RODRIGUES": ["04. Transporte de Pessoal", 0.615, 13], "CORTA": ["13. Ferramentas e Utensílios", 0.85, 40], "VSCR": ["13. Ferramentas e Utensílios", 1.0, 34], "REGULADOR": ["13. Ferramentas e Utensílios", 0.655, 55], "LADO": ["13. Ferramentas e Utensílios", 1.0, 34], "WHITE": ["13. Ferramentas e Utensílios", 0.6, 70], "MARTINS": ["13. Ferramentas e Utensílios", 0.689, 61], "CIL": ["07. Equipamentos e Locações", 1.0, 18], "STARGOLD": ["07. Equipamentos e Locações", 1.0, 18], "FOLHAS": ["14. Materiais", 1.0, 19], "TOALHA": ["14. Materiais", 1.0, 34], "INTERFOLHADO": ["14. Materiais", 1.0, 17], "FIBRA": ["13. Ferramentas e Utensílios", 0.667, 3], "FERRAGENS": ["14. Materiais", 0.72, 50], "EXTENSAO": ["07. Equipamentos e Locações", 0.846, 13], "NELKA": ["14. Materiais", 0.72, 50], "VOLTS": ["13. Ferramentas e Utensílios", 1.0, 3], "FERRO": ["13. Ferramentas e Utensílios", 0.767, 43], "ELETRICO": ["14. Materiais", 0.871, 326], "SOLDA": ["07. Equipamentos e Locações", 0.764, 144], "LEDS": ["14. Materiais", 1.0, 3], "EMERGENCIA": ["14. Materiais", 0.846, 13], "LUMINARIA": ["14. Materiais", 0.875, 8], "RECARREGAVEL": ["14. Materiais", 1.0, 3], "BIVOLT": ["14. Materiais", 0.893, 28], "TRANSPARENTE": ["12. EPIs e Uniformes", 0.667, 3], "FITA": ["14. Materiais", 0.917, 24], "ARAME": ["14. Materiais", 1.0, 7], "PASTA": ["14. Materiais", 1.0, 9], "ALUGAMAQUINAS": ["07. Equipamentos e Locações", 1.0, 47], "RETIFICADOR": ["07. Equipamentos e Locações", 1.0, 42], "INVERSOR": ["07. Equipamentos e Locações", 0.978, 46], "TOCHA": ["07. Equipamentos e Locações", 1.0, 13], "SBME": ["07. Equipamentos e Locações", 1.0, 11], "LATTINE": ["10. Serviços de Terceiros", 1.0, 13], "CONSULT": ["10. Serviços de Terceiros", 1.0, 13], "ESCRITORIO": ["14. Materiais", 1.0, 88], "EMBALADORA": ["14. Materiais", 1.0, 4], "FIT": ["12. EPIs e Uniformes", 0.75, 4], "ADESIVA": ["14. Materiais", 1.0, 10], "EQUIPAMENTO": ["12. EPIs e Uniformes", 0.989, 466], "SERIE": ["12. EPIs e Uniformes", 1.0, 21], "MASCARA": ["12. EPIs e Uniformes", 1.0, 111], "PARKMOL": ["12. EPIs e Uniformes", 0.575, 120], "N11": ["12. EPIs e Uniformes", 1.0, 17], "MOD": ["12. EPIs e Uniformes", 0.774, 31], "MOLDADOS": ["12. EPIs e Uniformes", 0.575, 120], "FILTRO": ["12. EPIs e Uniformes", 0.902, 51], "BRINDES": ["16. Gastos Gerais", 1.0, 8], "LOGISTICA": ["07. Equipamentos e Locações", 0.923, 26], "COMUNICACAO": ["07. Equipamentos e Locações", 1.0, 18], "SISTEMAS": ["07. Equipamentos e Locações", 1.0, 23], "RADIO": ["07. Equipamentos e Locações", 1.0, 18], "FILRADIO": ["07. Equipamentos e Locações", 1.0, 18], "TRANSMISSOR": ["07. Equipamentos e Locações", 1.0, 18], "GARRAFAO": ["06. Alimentação", 1.0, 39], "EMANUEL": ["06. Alimentação", 1.0, 39], "DISTRIBUIDORA": ["06. Alimentação", 1.0, 39], "HDFGT": ["08. Veículos e Locações", 1.0, 12], "TICKET": ["08. Veículos e Locações", 1.0, 12], "SEXTAVADO": ["13. Ferramentas e Utensílios", 0.842, 38], "ALAVANCA": ["13. Ferramentas e Utensílios", 0.821, 39], "MEDICA": ["05. Saúde", 1.0, 188], "PLANOS": ["05. Saúde", 1.0, 63], "UNIMED": ["05. Saúde", 1.0, 56], "TRABALHO": ["05. Saúde", 1.0, 27], "GRUPO": ["05. Saúde", 1.0, 63], "CONVENIOS": ["05. Saúde", 1.0, 63], "BELO": ["05. Saúde", 1.0, 27], "INDIVIDUAL": ["05. Saúde", 1.0, 63], "ODONTOLOGICA": ["05. Saúde", 1.0, 175], "COOPERATIVA": ["05. Saúde", 0.964, 28], "CONG": ["05. Saúde", 1.0, 63], "MEDICO": ["05. Saúde", 1.0, 40], "MEDICINA": ["05. Saúde", 1.0, 76], "RUBER": ["07. Equipamentos e Locações", 0.591, 22], "CORRUGADA": ["14. Materiais", 1.0, 4], "FLEXIVEL": ["14. Materiais", 0.918, 49], "MANGUEIRA": ["14. Materiais", 0.569, 51], "PORCA": ["14. Materiais", 0.765, 17], "SEXTAVADA": ["14. Materiais", 1.0, 6], "BANCO": ["04. Transporte de Pessoal", 0.722, 18], "BRADESCO": ["05. Saúde", 0.571, 42], "EMC": ["07. Equipamentos e Locações", 1.0, 25], "AEREAS": ["04. Transporte de Pessoal", 1.0, 17], "PASSAGENS": ["04. Transporte de Pessoal", 1.0, 17], "RODOVIARIAS": ["04. Transporte de Pessoal", 1.0, 17], "CARRETA": ["11. Fretes e Carretos", 1.0, 5], "PASSAGEIROS": ["04. Transporte de Pessoal", 1.0, 58], "INTERMUNICIPAL": ["04. Transporte de Pessoal", 0.918, 61], "INTERESTADUAL": ["04. Transporte de Pessoal", 0.918, 61], "AGNUS": ["04. Transporte de Pessoal", 1.0, 16], "LOCADORA": ["04. Transporte de Pessoal", 0.889, 18], "DEI": ["04. Transporte de Pessoal", 1.0, 16], "DELTA": ["12. EPIs e Uniformes", 1.0, 15], "MADEMUNDO": ["12. EPIs e Uniformes", 0.608, 74], "PFF": ["12. EPIs e Uniformes", 1.0, 27], "SERRA": ["14. Materiais", 0.941, 17], "FURO": ["14. Materiais", 0.833, 12], "DIAMANTADA": ["14. Materiais", 1.0, 9], "EXTINTORES": ["07. Equipamentos e Locações", 0.629, 35], "QUIMICO": ["12. EPIs e Uniformes", 1.0, 7], "GAUCHA": ["07. Equipamentos e Locações", 0.629, 35], "EXTINTOR": ["14. Materiais", 0.6, 5], "DCON": ["07. Equipamentos e Locações", 1.0, 7], "MANIPULADOR": ["07. Equipamentos e Locações", 1.0, 11], "DESINFECCAO": ["09. Escritório e Hospedagem", 1.0, 6], "HIGIENIZACAO": ["12. EPIs e Uniformes", 0.75, 24], "DEDETIZACAO": ["09. Escritório e Hospedagem", 1.0, 6], "DESRATIZACAO": ["09. Escritório e Hospedagem", 1.0, 6], "DEDETIZADORA": ["09. Escritório e Hospedagem", 1.0, 6], "IMUNIZACAO": ["09. Escritório e Hospedagem", 1.0, 6], "PULV": ["09. Escritório e Hospedagem", 1.0, 6], "DESINSETIZACAO": ["09. Escritório e Hospedagem", 1.0, 6], "INSTALACOES": ["09. Escritório e Hospedagem", 1.0, 16], "HALLEY": ["09. Escritório e Hospedagem", 1.0, 6], "MAG": ["07. Equipamentos e Locações", 0.625, 16], "MIG": ["07. Equipamentos e Locações", 0.667, 18], "FONTE": ["07. Equipamentos e Locações", 0.929, 14], "SOLDALIDER": ["07. Equipamentos e Locações", 1.0, 89], "CABECOTE": ["07. Equipamentos e Locações", 1.0, 11], "NOTEBOOKS": ["07. Equipamentos e Locações", 1.0, 16], "LIDER": ["07. Equipamentos e Locações", 1.0, 16], "ELETRICA": ["07. Equipamentos e Locações", 0.692, 26], "IMPCATO": ["07. Equipamentos e Locações", 1.0, 12], "CPI": ["07. Equipamentos e Locações", 1.0, 12], "CELEVAN": ["06. Alimentação", 1.0, 25], "SODEXO": ["06. Alimentação", 1.0, 34], "CHAVEIROS": ["10. Serviços de Terceiros", 1.0, 19], "CONFECCAO": ["10. Serviços de Terceiros", 1.0, 19], "CARIMBOS": ["10. Serviços de Terceiros", 1.0, 19], "BANNERS": ["10. Serviços de Terceiros", 1.0, 19], "ADESIVO": ["10. Serviços de Terceiros", 0.905, 21], "SANDRO": ["10. Serviços de Terceiros", 1.0, 15], "SILVA": ["10. Serviços de Terceiros", 0.714, 21], "HONORIO": ["10. Serviços de Terceiros", 1.0, 15], "SINALIZACAO": ["10. Serviços de Terceiros", 0.731, 26], "PLACAS": ["10. Serviços de Terceiros", 1.0, 19], "VISUAL": ["10. Serviços de Terceiros", 1.0, 19], "FERNANDES": ["07. Equipamentos e Locações", 0.979, 48], "RUI": ["07. Equipamentos e Locações", 0.979, 48], "PRODUTOS": ["12. EPIs e Uniformes", 1.0, 5], "FOTOGRAFICOS": ["12. EPIs e Uniformes", 1.0, 5], "ELASTICO": ["12. EPIs e Uniformes", 0.842, 19], "PROTECAO": ["12. EPIs e Uniformes", 0.895, 57], "LENTEX": ["12. EPIs e Uniformes", 1.0, 5], "OCULOS": ["12. EPIs e Uniformes", 1.0, 50], "LENTE": ["12. EPIs e Uniformes", 1.0, 42], "INCOLOR": ["12. EPIs e Uniformes", 0.977, 43], "OTICOS": ["12. EPIs e Uniformes", 1.0, 5], "SEG": ["12. EPIs e Uniformes", 1.0, 24], "KGF": ["13. Ferramentas e Utensílios", 1.0, 4], "CM2": ["13. Ferramentas e Utensílios", 1.0, 4], "MANOMETRO": ["13. Ferramentas e Utensílios", 0.714, 7], "GAS": ["07. Equipamentos e Locações", 1.0, 15], "GLP": ["07. Equipamentos e Locações", 1.0, 19], "CILINDRO": ["07. Equipamentos e Locações", 1.0, 14], "UNIAO": ["07. Equipamentos e Locações", 0.969, 32], "DEJETOS": ["07. Equipamentos e Locações", 1.0, 6], "EMPILHADEIRA": ["07. Equipamentos e Locações", 1.0, 6], "REMOCOES": ["07. Equipamentos e Locações", 1.0, 30], "ELLER": ["07. Equipamentos e Locações", 1.0, 30], "LIGHT": ["15. Utilidades e Serviços", 1.0, 6], "ELETRICIDADE": ["05. Saúde", 0.684, 19], "CAMPOS": ["06. Alimentação", 1.0, 15], "GELO": ["06. Alimentação", 1.0, 15], "FACIAL": ["12. EPIs e Uniformes", 1.0, 50], "SEMI": ["12. EPIs e Uniformes", 1.0, 50], "VAPORES": ["12. EPIs e Uniformes", 1.0, 18], "ORGANICOS": ["12. EPIs e Uniformes", 1.0, 18], "ACIDOS": ["12. EPIs e Uniformes", 1.0, 19], "CARTUCHO": ["12. EPIs e Uniformes", 1.0, 24], "ANTIEMBACANTE": ["12. EPIs e Uniformes", 1.0, 27], "ANTIRRISCO": ["12. EPIs e Uniformes", 1.0, 27], "TURBINE": ["12. EPIs e Uniformes", 1.0, 27], "EXAMES": ["05. Saúde", 0.65, 20], "RADIOTERAPIA": ["05. Saúde", 1.0, 13], "CLINICAS": ["05. Saúde", 1.0, 13], "ADMISSIONAIS": ["05. Saúde", 1.0, 13], "ANALISES": ["05. Saúde", 0.65, 20], "HELENA": ["04. Transporte de Pessoal", 0.604, 48], "OCUPACIONAL": ["05. Saúde", 1.0, 13], "PERIODICOS": ["05. Saúde", 1.0, 13], "PATOLOGIA": ["05. Saúde", 1.0, 13], "QUIMIOTERAPIA": ["05. Saúde", 1.0, 13], "SANTA": ["05. Saúde", 0.684, 19], "MEDICOS": ["05. Saúde", 1.0, 13], "MOVEIS": ["07. Equipamentos e Locações", 0.8, 30], "BENS": ["07. Equipamentos e Locações", 0.615, 39], "NOTAS": ["07. Equipamentos e Locações", 1.0, 24], "FISCAIS": ["07. Equipamentos e Locações", 1.0, 24], "ACOBERTADOS": ["07. Equipamentos e Locações", 1.0, 24], "CENTRO": ["16. Gastos Gerais", 0.857, 7], "CONHEC": ["16. Gastos Gerais", 1.0, 16], "INSTRUCAO": ["16. Gastos Gerais", 1.0, 16], "AVALIACAO": ["16. Gastos Gerais", 1.0, 16], "ORIENTACAO": ["16. Gastos Gerais", 1.0, 16], "EDUCACIONAL": ["16. Gastos Gerais", 1.0, 16], "PEDAG": ["16. Gastos Gerais", 1.0, 16], "CLARO": ["15. Utilidades e Serviços", 1.0, 14], "TELEFONE": ["15. Utilidades e Serviços", 0.974, 39], "INTERNET": ["15. Utilidades e Serviços", 1.0, 38], "DUPLO": ["14. Materiais", 0.684, 19], "REFORCADO": ["14. Materiais", 0.8, 15], "REFRAMAX": ["14. Materiais", 1.0, 15], "LOG": ["14. Materiais", 1.0, 12], "PAPELAO": ["14. Materiais", 1.0, 12], "PROTON": ["07. Equipamentos e Locações", 0.833, 12], "ENGATE": ["07. Equipamentos e Locações", 1.0, 12], "MARCAS": ["07. Equipamentos e Locações", 1.0, 7], "AIR": ["12. EPIs e Uniformes", 0.571, 21], "FUNGUAP": ["07. Equipamentos e Locações", 1.0, 21], "SERVICE": ["07. Equipamentos e Locações", 1.0, 9], "ORELHAS": ["07. Equipamentos e Locações", 1.0, 9], "ESPIGA": ["07. Equipamentos e Locações", 1.0, 6], "ERM": ["07. Equipamentos e Locações", 0.667, 3], "CONECTOR": ["07. Equipamentos e Locações", 0.643, 14], "CRI": ["07. Equipamentos e Locações", 1.0, 7], "INTERNA": ["07. Equipamentos e Locações", 1.0, 16], "ADAPTADOR": ["07. Equipamentos e Locações", 0.625, 16], "INOX": ["14. Materiais", 0.733, 15], "GRAUS": ["12. EPIs e Uniformes", 0.957, 93], "TUPY": ["07. Equipamentos e Locações", 1.0, 3], "JOELHO": ["07. Equipamentos e Locações", 0.75, 4], "GALVANIZADO": ["07. Equipamentos e Locações", 0.889, 9], "TUPI": ["07. Equipamentos e Locações", 1.0, 4], "CODIGO": ["13. Ferramentas e Utensílios", 0.75, 16], "NIPLE": ["07. Equipamentos e Locações", 0.667, 12], "DIAM": ["07. Equipamentos e Locações", 0.941, 17], "GWS850": ["07. Equipamentos e Locações", 1.0, 4], "BOSCH": ["07. Equipamentos e Locações", 0.857, 7], "INDUZIDO": ["07. Equipamentos e Locações", 1.0, 8], "B9G": ["07. Equipamentos e Locações", 1.0, 4], "ESMERILHADEIRA": ["07. Equipamentos e Locações", 0.857, 7], "REDUCAO": ["07. Equipamentos e Locações", 1.0, 7], "METALICO": ["13. Ferramentas e Utensílios", 0.583, 12], "RODIZIO": ["07. Equipamentos e Locações", 1.0, 4], "ANDAIME": ["13. Ferramentas e Utensílios", 0.583, 12], "RODA": ["07. Equipamentos e Locações", 0.625, 8], "MACICA": ["07. Equipamentos e Locações", 1.0, 5], "R2258": ["07. Equipamentos e Locações", 1.0, 5], "PMR": ["07. Equipamentos e Locações", 1.0, 5], "LUVA": ["12. EPIs e Uniformes", 0.934, 61], "MISTA": ["12. EPIs e Uniformes", 0.583, 36], "CURTO": ["12. EPIs e Uniformes", 0.706, 17], "PETROLEIRA": ["12. EPIs e Uniformes", 1.0, 12], "VAQUETA": ["12. EPIs e Uniformes", 1.0, 21], "CANO": ["12. EPIs e Uniformes", 1.0, 12], "ANTIPERFURANTE": ["12. EPIs e Uniformes", 1.0, 89], "BOTINA": ["12. EPIs e Uniformes", 1.0, 92], "CA34101": ["12. EPIs e Uniformes", 1.0, 89], "BIQ": ["12. EPIs e Uniformes", 1.0, 89], "PALM": ["12. EPIs e Uniformes", 1.0, 89], "COMPOSITE": ["12. EPIs e Uniformes", 1.0, 89], "REF60B29": ["12. EPIs e Uniformes", 1.0, 89], "NITIRILICO": ["12. EPIs e Uniformes", 1.0, 89], "MARLUVAS": ["12. EPIs e Uniformes", 1.0, 89], "SOLADO": ["12. EPIs e Uniformes", 1.0, 89], "UVEX": ["12. EPIs e Uniformes", 1.0, 17], "STELT": ["12. EPIs e Uniformes", 1.0, 8], "S3960": ["12. EPIs e Uniformes", 1.0, 17], "AMPLA": ["12. EPIs e Uniformes", 1.0, 8], "VISAO": ["12. EPIs e Uniformes", 1.0, 8], "TAM": ["12. EPIs e Uniformes", 1.0, 84], "SPR522": ["12. EPIs e Uniformes", 1.0, 4], "ELIPSE": ["12. EPIs e Uniformes", 1.0, 4], "GVS": ["12. EPIs e Uniformes", 1.0, 4], "RESPIRADOR": ["12. EPIs e Uniformes", 1.0, 4], "BETTER": ["12. EPIs e Uniformes", 1.0, 5], "PROTENGE": ["12. EPIs e Uniformes", 1.0, 5], "VISEIRA": ["12. EPIs e Uniformes", 1.0, 5], "DOURADO": ["12. EPIs e Uniformes", 1.0, 5], "PAR": ["12. EPIs e Uniformes", 1.0, 9], "LUV": ["12. EPIs e Uniformes", 1.0, 8], "TRATAMENTO": ["12. EPIs e Uniformes", 1.0, 8], "ANTICHAMA": ["12. EPIs e Uniformes", 0.889, 9], "MALHA": ["12. EPIs e Uniformes", 0.889, 9], "JOBE": ["12. EPIs e Uniformes", 1.0, 8], "IGNIFUGO": ["12. EPIs e Uniformes", 1.0, 8], "ALGODAO": ["12. EPIs e Uniformes", 1.0, 8], "CAPUZ": ["12. EPIs e Uniformes", 1.0, 8], "MOLA": ["13. Ferramentas e Utensílios", 0.611, 18], "BRIM": ["12. EPIs e Uniformes", 1.0, 34], "LARANJA": ["12. EPIs e Uniformes", 1.0, 39], "FAIXA": ["12. EPIs e Uniformes", 1.0, 30], "CINZA": ["12. EPIs e Uniformes", 0.698, 43], "REFLETIVA": ["12. EPIs e Uniformes", 1.0, 30], "PESADO": ["12. EPIs e Uniformes", 1.0, 30], "COTOVELO": ["12. EPIs e Uniformes", 1.0, 3], "REFORCO": ["12. EPIs e Uniformes", 1.0, 13], "CAMISA": ["12. EPIs e Uniformes", 1.0, 31], "UNIFORMES": ["12. EPIs e Uniformes", 1.0, 25], "MANGA": ["12. EPIs e Uniformes", 1.0, 21], "LONGA": ["12. EPIs e Uniformes", 1.0, 16], "CLP": ["12. EPIs e Uniformes", 1.0, 4], "GRAM": ["12. EPIs e Uniformes", 1.0, 4], "CALCA": ["12. EPIs e Uniformes", 1.0, 33], "SEM": ["14. Materiais", 0.933, 30], "PEQUENA": ["13. Ferramentas e Utensílios", 1.0, 9], "DURACAO": ["13. Ferramentas e Utensílios", 1.0, 9], "PAREDE": ["14. Materiais", 0.75, 8], "LARGA": ["13. Ferramentas e Utensílios", 1.0, 3], "TARZA": ["13. Ferramentas e Utensílios", 1.0, 17], "MADEIRA": ["13. Ferramentas e Utensílios", 0.692, 13], "ENXADA": ["13. Ferramentas e Utensílios", 1.0, 3], "VONDER": ["13. Ferramentas e Utensílios", 0.692, 13], "STARRET": ["14. Materiais", 0.75, 8], "PEDREIRO": ["13. Ferramentas e Utensílios", 1.0, 13], "COLHER": ["13. Ferramentas e Utensílios", 1.0, 10], "PACETTA": ["13. Ferramentas e Utensílios", 1.0, 14], "REGUA": ["13. Ferramentas e Utensílios", 1.0, 9], "ANEL": ["14. Materiais", 0.778, 9], "REPECAS": ["13. Ferramentas e Utensílios", 1.0, 12], "TRINQUETA": ["13. Ferramentas e Utensílios", 1.0, 11], "FATOR": ["13. Ferramentas e Utensílios", 1.0, 21], "CINTA": ["13. Ferramentas e Utensílios", 1.0, 27], "CERTIFICADO": ["13. Ferramentas e Utensílios", 0.975, 40], "MINIMO": ["13. Ferramentas e Utensílios", 1.0, 21], "FORNECER": ["13. Ferramentas e Utensílios", 1.0, 39], "CAPACIDADE": ["13. Ferramentas e Utensílios", 1.0, 39], "NYLON": ["13. Ferramentas e Utensílios", 0.724, 29], "VERTICAL": ["13. Ferramentas e Utensílios", 1.0, 21], "CATRACA": ["13. Ferramentas e Utensílios", 1.0, 13], "AMARRACAO": ["13. Ferramentas e Utensílios", 0.857, 7], "TON": ["13. Ferramentas e Utensílios", 0.647, 17], "DESCR": ["13. Ferramentas e Utensílios", 1.0, 18], "MANILHA": ["13. Ferramentas e Utensílios", 1.0, 18], "RELEVO": ["13. Ferramentas e Utensílios", 1.0, 18], "PRESSAO": ["07. Equipamentos e Locações", 0.667, 30], "BORRACHA": ["14. Materiais", 0.833, 6], "LIBRAS": ["14. Materiais", 1.0, 3], "HPR": ["14. Materiais", 1.0, 14], "EMBORRACHADA": ["14. Materiais", 1.0, 14], "OXICORTE": ["14. Materiais", 1.0, 18], "DORMER": ["14. Materiais", 1.0, 27], "BROCA": ["14. Materiais", 1.0, 28], "ALTA": ["12. EPIs e Uniformes", 0.682, 22], "BIPARTIDA": ["14. Materiais", 1.0, 6], "ATLAS": ["14. Materiais", 1.0, 32], "COPCO": ["14. Materiais", 1.0, 6], "ABRACADEIRA": ["14. Materiais", 0.793, 29], "MANGOTE": ["14. Materiais", 0.8, 5], "SUPRENS": ["14. Materiais", 1.0, 4], "NORTON": ["14. Materiais", 1.0, 19], "CLASSIC": ["14. Materiais", 1.0, 5], "AR302": ["14. Materiais", 1.0, 4], "DISCO": ["14. Materiais", 0.931, 29], "COLORGIN": ["14. Materiais", 1.0, 11], "PRETO": ["14. Materiais", 0.872, 39], "SPRAY": ["14. Materiais", 0.667, 39], "ELETRODO": ["14. Materiais", 1.0, 33], "ROLO": ["14. Materiais", 0.867, 15], "ESPUMA": ["14. Materiais", 1.0, 18], "PINTURA": ["14. Materiais", 0.857, 14], "COMPLETA": ["14. Materiais", 0.75, 4], "PNEUS": ["14. Materiais", 1.0, 6], "ERI": ["07. Equipamentos e Locações", 1.0, 3], "ERT": ["07. Equipamentos e Locações", 1.0, 3], "ELETRODUTO": ["07. Equipamentos e Locações", 0.75, 4], "LIMPA": ["07. Equipamentos e Locações", 1.0, 13], "CONTATO": ["07. Equipamentos e Locações", 0.909, 22], "ELET": ["07. Equipamentos e Locações", 1.0, 13], "CONTRA": ["12. EPIs e Uniformes", 0.872, 47], "AGENTES": ["12. EPIs e Uniformes", 1.0, 38], "TERMICOS": ["12. EPIs e Uniformes", 1.0, 38], "MARINHO": ["12. EPIs e Uniformes", 1.0, 38], "BLUSAO": ["12. EPIs e Uniformes", 1.0, 19], "RASPA": ["12. EPIs e Uniformes", 1.0, 10], "X50M": ["12. EPIs e Uniformes", 1.0, 3], "TAPUME": ["12. EPIs e Uniformes", 1.0, 3], "FORTE": ["13. Ferramentas e Utensílios", 0.667, 9], "PESADA": ["12. EPIs e Uniformes", 1.0, 3], "VALEPLAST": ["12. EPIs e Uniformes", 1.0, 3], "TELA": ["12. EPIs e Uniformes", 1.0, 3], "BELZER": ["13. Ferramentas e Utensílios", 1.0, 8], "GRADUADO": ["13. Ferramentas e Utensílios", 1.0, 6], "SIMILAR": ["13. Ferramentas e Utensílios", 1.0, 21], "BALDE": ["13. Ferramentas e Utensílios", 1.0, 6], "COMBINADA": ["13. Ferramentas e Utensílios", 1.0, 4], "QUADRADA": ["07. Equipamentos e Locações", 0.667, 3], "TALHA": ["13. Ferramentas e Utensílios", 1.0, 5], "MANUAL": ["13. Ferramentas e Utensílios", 1.0, 5], "CAP": ["13. Ferramentas e Utensílios", 1.0, 8], "CADEADO": ["13. Ferramentas e Utensílios", 0.739, 23], "STAM": ["13. Ferramentas e Utensílios", 0.654, 26], "STECK": ["14. Materiais", 0.913, 46], "PLUG": ["14. Materiais", 1.0, 47], "N3076": ["14. Materiais", 1.0, 29], "GARRA": ["14. Materiais", 1.0, 11], "CARBOGRAFITE": ["14. Materiais", 1.0, 11], "NEGATIVA": ["14. Materiais", 1.0, 11], "CONDULETE": ["14. Materiais", 1.0, 16], "INTERRUPTOR": ["14. Materiais", 0.8, 5], "WETZEL": ["14. Materiais", 1.0, 3], "TAMPA": ["14. Materiais", 0.938, 16], "ENTRADAS": ["14. Materiais", 1.0, 5], "PVC": ["14. Materiais", 0.615, 26], "TRINCHA": ["14. Materiais", 1.0, 14], "ALICATE": ["14. Materiais", 0.875, 8], "PORTA": ["14. Materiais", 1.0, 18], "REBITE": ["14. Materiais", 1.0, 4], "POP": ["14. Materiais", 1.0, 4], "ESAB": ["14. Materiais", 1.0, 5], "PLASTICA": ["14. Materiais", 0.769, 26], "BUCHA": ["14. Materiais", 0.579, 19], "DESENGRIPANTE": ["14. Materiais", 1.0, 11], "LUBRIFICANTE": ["14. Materiais", 1.0, 11], "FECHADURA": ["14. Materiais", 1.0, 10], "ACABAMENTO": ["14. Materiais", 1.0, 4], "DOCOL": ["14. Materiais", 1.0, 4], "REGISTRO": ["14. Materiais", 0.688, 16], "GAVETA": ["14. Materiais", 1.0, 4], "OFICIO": ["14. Materiais", 1.0, 4], "GIZ": ["14. Materiais", 1.0, 8], "LOUSA": ["14. Materiais", 1.0, 8], "CX64": ["14. Materiais", 1.0, 8], "ANTIALERGICO": ["14. Materiais", 1.0, 8], "LARGURA": ["14. Materiais", 0.889, 9], "TERMOBANK": ["14. Materiais", 1.0, 6], "BOBINA": ["14. Materiais", 0.857, 7], "TUBETE": ["14. Materiais", 1.0, 6], "VIA": ["14. Materiais", 1.0, 6], "PONTO": ["14. Materiais", 1.0, 6], "RELOGIO": ["14. Materiais", 1.0, 6], "TRAMONTINA": ["13. Ferramentas e Utensílios", 0.75, 8], "DRIVE": ["14. Materiais", 1.0, 3], "PEN": ["14. Materiais", 1.0, 3], "USB": ["14. Materiais", 1.0, 3], "ARI": ["07. Equipamentos e Locações", 1.0, 3], "CARBONO": ["14. Materiais", 0.667, 12], "FEMEA": ["07. Equipamentos e Locações", 0.75, 4], "BITS": ["13. Ferramentas e Utensílios", 1.0, 5], "PARAFUSADEIRA": ["13. Ferramentas e Utensílios", 1.0, 3], "JOGO": ["13. Ferramentas e Utensílios", 0.667, 6], "TRIPOLAR": ["14. Materiais", 0.8, 10], "TERMOMAGNETICO": ["14. Materiais", 1.0, 12], "DISJUNTOR": ["14. Materiais", 0.955, 22], "N3056": ["14. Materiais", 1.0, 10], "TOMADA": ["14. Materiais", 0.955, 22], "ISOLADO": ["14. Materiais", 1.0, 13], "MONOFASICO": ["14. Materiais", 1.0, 3], "SECUNDARIO": ["14. Materiais", 1.0, 3], "TRANSFORMADOR": ["14. Materiais", 0.75, 4], "HELLERMAN": ["14. Materiais", 1.0, 9], "SUPORTE": ["14. Materiais", 0.7, 10], "DECA": ["14. Materiais", 1.0, 7], "METAL": ["14. Materiais", 1.0, 7], "FORMATO": ["14. Materiais", 1.0, 8], "FOLHETO": ["14. Materiais", 1.0, 5], "ACRILICO": ["14. Materiais", 1.0, 12], "APAGADOR": ["14. Materiais", 1.0, 3], "PILOT": ["14. Materiais", 1.0, 3], "QUADRO": ["14. Materiais", 1.0, 3], "CREPE": ["14. Materiais", 1.0, 3], "ADERE": ["14. Materiais", 1.0, 3], "GENMES": ["14. Materiais", 1.0, 4], "GRAMPEADOR": ["14. Materiais", 1.0, 4], "FIO": ["14. Materiais", 1.0, 9], "TECLADO": ["14. Materiais", 1.0, 6], "LOGITECH": ["14. Materiais", 1.0, 9], "MOUSE": ["14. Materiais", 1.0, 11], "ONIBUS": ["04. Transporte de Pessoal", 1.0, 28], "TRANSPORTADORA": ["04. Transporte de Pessoal", 1.0, 29], "VANS": ["04. Transporte de Pessoal", 1.0, 28], "TURISMO": ["04. Transporte de Pessoal", 1.0, 29], "TOPOGRAFIA": ["07. Equipamentos e Locações", 1.0, 6], "TEOMAC": ["07. Equipamentos e Locações", 1.0, 6], "GEOTECNOLOGIAS": ["07. Equipamentos e Locações", 1.0, 6], "EUROBRAS": ["07. Equipamentos e Locações", 1.0, 7], "CONSTR": ["07. Equipamentos e Locações", 1.0, 7], "METALICAS": ["07. Equipamentos e Locações", 1.0, 7], "MODULADAS": ["07. Equipamentos e Locações", 1.0, 7], "PONTEIRO": ["07. Equipamentos e Locações", 0.692, 13], "TECNOBRE": ["07. Equipamentos e Locações", 1.0, 65], "TALHADEIRA": ["07. Equipamentos e Locações", 1.0, 3], "ROMPEDOR": ["07. Equipamentos e Locações", 1.0, 17], "PERFURADOR": ["07. Equipamentos e Locações", 1.0, 17], "MARTELO": ["07. Equipamentos e Locações", 1.0, 17], "VIBRADOR": ["07. Equipamentos e Locações", 1.0, 12], "IMERSAO": ["07. Equipamentos e Locações", 1.0, 12], "TRIFASICO": ["07. Equipamentos e Locações", 0.75, 16], "IMPACTO": ["07. Equipamentos e Locações", 0.786, 14], "FURADEIRA": ["07. Equipamentos e Locações", 1.0, 5], "RENT": ["08. Veículos e Locações", 1.0, 12], "VEICULO": ["08. Veículos e Locações", 1.0, 7], "CAR": ["08. Veículos e Locações", 1.0, 12], "LOCALIZA": ["08. Veículos e Locações", 1.0, 12], "TRANSITO": ["08. Veículos e Locações", 1.0, 12], "MULTAS": ["16. Gastos Gerais", 0.739, 46], "LINK": ["15. Utilidades e Serviços", 1.0, 7], "MAIS": ["04. Transporte de Pessoal", 0.692, 26], "TELECOMUNICACAO": ["15. Utilidades e Serviços", 1.0, 7], "UBER": ["04. Transporte de Pessoal", 1.0, 10], "LISO": ["14. Materiais", 1.0, 10], "DEMARCACAO": ["14. Materiais", 0.6, 5], "ACRILICA": ["14. Materiais", 1.0, 10], "PISO": ["14. Materiais", 0.941, 17], "NOVACOR": ["14. Materiais", 1.0, 10], "CALOR": ["12. EPIs e Uniformes", 1.0, 3], "AMIL": ["05. Saúde", 1.0, 119], "INTERNACIONAL": ["05. Saúde", 1.0, 36], "TECIDOS": ["13. Ferramentas e Utensílios", 1.0, 4], "BARTOLOMEU": ["13. Ferramentas e Utensílios", 1.0, 4], "MIGUEL": ["13. Ferramentas e Utensílios", 1.0, 4], "ARMARINHO": ["13. Ferramentas e Utensílios", 1.0, 4], "LATEX": ["14. Materiais", 0.6, 10], "TINTAS": ["14. Materiais", 1.0, 10], "UNICOLOR": ["14. Materiais", 1.0, 10], "PVA": ["14. Materiais", 1.0, 6], "AROMATIZADOR": ["14. Materiais", 1.0, 3], "BOM": ["14. Materiais", 1.0, 3], "ALCOOL": ["14. Materiais", 1.0, 7], "INSETICIDA": ["14. Materiais", 1.0, 12], "CHEIRO": ["14. Materiais", 1.0, 12], "BASTON": ["14. Materiais", 1.0, 12], "PERSONALIZADA": ["14. Materiais", 1.0, 3], "TORNEAMENTOS": ["07. Equipamentos e Locações", 1.0, 3], "COMPRESSORES": ["07. Equipamentos e Locações", 1.0, 6], "ALUGCOMP": ["07. Equipamentos e Locações", 1.0, 6], "COMPRESSOR": ["07. Equipamentos e Locações", 1.0, 7], "GATES": ["07. Equipamentos e Locações", 0.667, 3], "PROJECAO": ["07. Equipamentos e Locações", 0.833, 6], "RESISTENTE": ["12. EPIs e Uniformes", 1.0, 15], "TEMPERATURA": ["12. EPIs e Uniformes", 1.0, 15], "SAFETY": ["12. EPIs e Uniformes", 1.0, 12], "ELO": ["12. EPIs e Uniformes", 1.0, 6], "ISOLAMENTO": ["12. EPIs e Uniformes", 1.0, 6], "PROVA": ["14. Materiais", 1.0, 22], "LED": ["14. Materiais", 0.853, 34], "REFLETOR": ["14. Materiais", 1.0, 22], "HOLOFOTE": ["14. Materiais", 1.0, 22], "FRIO": ["14. Materiais", 1.0, 22], "COMPRESSAO": ["14. Materiais", 1.0, 10], "ESTANHADO": ["14. Materiais", 1.0, 10], "OLHAL": ["14. Materiais", 0.857, 14], "COBRE": ["14. Materiais", 1.0, 11], "TERMINAL": ["14. Materiais", 1.0, 21], "ELETROLITICO": ["14. Materiais", 1.0, 10], "PARAFUSOS": ["14. Materiais", 1.0, 5], "TS120BF": ["14. Materiais", 1.0, 4], "BRANCA": ["14. Materiais", 0.875, 8], "SLIM": ["14. Materiais", 0.8, 5], "AR312": ["14. Materiais", 1.0, 14], "EPI": ["12. EPIs e Uniformes", 1.0, 18], "VENDAS": ["12. EPIs e Uniformes", 0.947, 19], "VESTSERV": ["12. EPIs e Uniformes", 1.0, 18], "ELEVACAO": ["07. Equipamentos e Locações", 1.0, 5], "ELEVA": ["07. Equipamentos e Locações", 1.0, 5], "INSTITUTO": ["07. Equipamentos e Locações", 1.0, 3], "IMI": ["07. Equipamentos e Locações", 1.0, 3], "INDUSTRIAL": ["07. Equipamentos e Locações", 0.625, 8], "ESPORTIVAS": ["05. Saúde", 1.0, 4], "ISOTONICO": ["05. Saúde", 1.0, 4], "MEDICAMENTOS": ["05. Saúde", 1.0, 10], "REIDRATANTE": ["05. Saúde", 1.0, 4], "DUCARMO": ["05. Saúde", 1.0, 4], "SUDRACT": ["05. Saúde", 1.0, 4], "ALIMENTOS": ["05. Saúde", 1.0, 4], "ROUPAS": ["05. Saúde", 1.0, 4], "HIDRAULICA": ["07. Equipamentos e Locações", 1.0, 10], "HARDE": ["14. Materiais", 0.75, 4], "BORNE": ["14. Materiais", 1.0, 14], "METALTEX": ["14. Materiais", 0.833, 18], "MGB": ["14. Materiais", 1.0, 4], "TRILHO": ["14. Materiais", 1.0, 6], "TS35": ["14. Materiais", 1.0, 5], "SAK": ["14. Materiais", 1.0, 10], "MTB": ["14. Materiais", 1.0, 4], "FINAL": ["14. Materiais", 1.0, 4], "MAT": ["14. Materiais", 1.0, 5], "POLOS": ["14. Materiais", 1.0, 7], "SAIDA": ["07. Equipamentos e Locações", 0.611, 18], "BLOCO": ["07. Equipamentos e Locações", 0.571, 7], "REDONDO": ["14. Materiais", 0.75, 4], "BOTAO": ["14. Materiais", 0.667, 6], "VERMELHO": ["14. Materiais", 0.947, 19], "COMPRIMENTO": ["07. Equipamentos e Locações", 0.667, 9], "POLEGADA": ["14. Materiais", 1.0, 3], "CONDUSPAR": ["14. Materiais", 1.0, 10], "BARRAMENTO": ["14. Materiais", 1.0, 6], "PAINEL": ["14. Materiais", 0.667, 3], "ELEMENTO": ["07. Equipamentos e Locações", 0.75, 4], "VCA": ["07. Equipamentos e Locações", 0.571, 7], "RELE": ["07. Equipamentos e Locações", 1.0, 3], "BCM01F": ["07. Equipamentos e Locações", 1.0, 4], "CSW": ["07. Equipamentos e Locações", 0.833, 6], "BIPOLAR": ["14. Materiais", 0.667, 6], "MDW": ["14. Materiais", 1.0, 6], "MINI": ["14. Materiais", 0.778, 9], "MONOPOLAR": ["14. Materiais", 1.0, 8], "GILMAR": ["07. Equipamentos e Locações", 0.8, 5], "R2AT": ["07. Equipamentos e Locações", 1.0, 5], "ALVES": ["07. Equipamentos e Locações", 0.8, 5], "BAR": ["07. Equipamentos e Locações", 0.6, 5], "CONDUCAO": ["04. Transporte de Pessoal", 0.909, 11], "GASOLINA": ["08. Veículos e Locações", 1.0, 19], "VANILDA": ["08. Veículos e Locações", 0.731, 26], "DERIVADOS": ["08. Veículos e Locações", 0.731, 26], "NOBUCK": ["12. EPIs e Uniformes", 1.0, 3], "PR29": ["12. EPIs e Uniformes", 1.0, 3], "EQUIP": ["12. EPIs e Uniformes", 1.0, 6], "MATOS": ["12. EPIs e Uniformes", 1.0, 6], "EDNO": ["12. EPIs e Uniformes", 1.0, 6], "RESINADO": ["14. Materiais", 1.0, 4], "COLA": ["14. Materiais", 1.0, 3], "ANTI": ["12. EPIs e Uniformes", 1.0, 27], "HUMANA": ["16. Gastos Gerais", 1.0, 10], "CRIATIVA": ["16. Gastos Gerais", 1.0, 10], "OESTE": ["07. Equipamentos e Locações", 1.0, 3], "SAE": ["14. Materiais", 0.667, 3], "AWS": ["10. Serviços de Terceiros", 0.667, 3], "MANG": ["07. Equipamentos e Locações", 1.0, 7], "MICROFIBRA": ["14. Materiais", 0.667, 3], "POTE": ["14. Materiais", 1.0, 5], "MANTIMENTOS": ["14. Materiais", 1.0, 5], "VOLL": ["04. Transporte de Pessoal", 0.583, 12], "CARGAS": ["11. Fretes e Carretos", 1.0, 5], "ESCALA": ["13. Ferramentas e Utensílios", 0.667, 3], "TOP": ["14. Materiais", 1.0, 8], "ISOLANTE": ["14. Materiais", 0.917, 12], "PLACA": ["07. Equipamentos e Locações", 0.588, 17], "M190": ["14. Materiais", 1.0, 3], "X25": ["07. Equipamentos e Locações", 1.0, 10], "PAF321": ["07. Equipamentos e Locações", 1.0, 5], "FOTOL": ["07. Equipamentos e Locações", 1.0, 10], "SETA": ["07. Equipamentos e Locações", 1.0, 10], "DIR": ["07. Equipamentos e Locações", 1.0, 5], "EXIT": ["07. Equipamentos e Locações", 1.0, 10], "ESQ": ["07. Equipamentos e Locações", 1.0, 5], "PAF322": ["07. Equipamentos e Locações", 1.0, 5], "ELETRICISTA": ["12. EPIs e Uniformes", 1.0, 9], "DANNY": ["12. EPIs e Uniformes", 1.0, 16], "FLEXTACTIL": ["12. EPIs e Uniformes", 1.0, 5], "MASCULINA": ["12. EPIs e Uniformes", 1.0, 4], "CEDROMIX": ["12. EPIs e Uniformes", 1.0, 4], "ADMINISTRATIVA": ["12. EPIs e Uniformes", 1.0, 4], "CURTA": ["12. EPIs e Uniformes", 1.0, 4], "TAMANHO": ["12. EPIs e Uniformes", 0.9, 10], "BIC": ["14. Materiais", 1.0, 5], "CANETA": ["14. Materiais", 0.857, 7], "ESFEROGRAFICA": ["14. Materiais", 1.0, 5], "TAMPAO": ["07. Equipamentos e Locações", 1.0, 3], "MULTIGAS": ["12. EPIs e Uniformes", 1.0, 5], "UNITARIO": ["12. EPIs e Uniformes", 1.0, 5], "BIMETAL": ["14. Materiais", 1.0, 7], "CONF": ["07. Equipamentos e Locações", 1.0, 4], "FIXACAO": ["07. Equipamentos e Locações", 1.0, 4], "DESENHO": ["07. Equipamentos e Locações", 0.667, 6], "INTERFOLHEADO": ["14. Materiais", 1.0, 10], "ESFOLIANTE": ["14. Materiais", 1.0, 5], "GIENEX": ["14. Materiais", 1.0, 5], "FINANCEIRA": ["10. Serviços de Terceiros", 1.0, 10], "CONSULTORIA": ["10. Serviços de Terceiros", 1.0, 18], "ECONOMICA": ["10. Serviços de Terceiros", 1.0, 10], "FILHO": ["10. Serviços de Terceiros", 1.0, 4], "FONTOURA": ["10. Serviços de Terceiros", 1.0, 4], "CLAUDSTON": ["10. Serviços de Terceiros", 1.0, 4], "VM302": ["12. EPIs e Uniformes", 1.0, 9], "PALMA": ["12. EPIs e Uniformes", 1.0, 9], "VALCAN": ["12. EPIs e Uniformes", 1.0, 9], "PUNHO": ["12. EPIs e Uniformes", 0.9, 10], "BARCELLOS": ["12. EPIs e Uniformes", 1.0, 5], "MATHEUS": ["12. EPIs e Uniformes", 1.0, 5], "INDENIZACAO": ["07. Equipamentos e Locações", 1.0, 5], "LOCADO": ["07. Equipamentos e Locações", 1.0, 5], "TERC": ["07. Equipamentos e Locações", 1.0, 5], "SAO": ["15. Utilidades e Serviços", 1.0, 10], "PAULO": ["15. Utilidades e Serviços", 1.0, 10], "TELECOMUNICACOES": ["15. Utilidades e Serviços", 1.0, 10], "TELESP": ["15. Utilidades e Serviços", 1.0, 10], "GUIA": ["07. Equipamentos e Locações", 1.0, 6], "PINO": ["07. Equipamentos e Locações", 1.0, 3], "SHOOTER": ["07. Equipamentos e Locações", 1.0, 3], "VCC": ["07. Equipamentos e Locações", 0.833, 6], "CHAVEADA": ["07. Equipamentos e Locações", 1.0, 3], "M10": ["14. Materiais", 0.8, 5], "ARRUELA": ["14. Materiais", 0.909, 11], "DIN": ["14. Materiais", 0.9, 10], "LISA": ["14. Materiais", 0.556, 9], "M12": ["14. Materiais", 1.0, 4], "CLASSE": ["14. Materiais", 1.0, 3], "CHATA": ["14. Materiais", 0.667, 3], "CABECA": ["14. Materiais", 1.0, 4], "L20": ["07. Equipamentos e Locações", 0.6, 5], "SINALEIRO": ["07. Equipamentos e Locações", 0.667, 6], "AR9": ["07. Equipamentos e Locações", 1.0, 3], "IP65": ["07. Equipamentos e Locações", 0.6, 5], "MAX": ["07. Equipamentos e Locações", 0.8, 10], "ACOPLAMENTO": ["07. Equipamentos e Locações", 1.0, 4], "CONJUNTO": ["14. Materiais", 0.667, 6], "VIDRO": ["14. Materiais", 0.714, 7], "FUNDIDO": ["07. Equipamentos e Locações", 0.667, 3], "ASTM": ["14. Materiais", 0.75, 4], "DESEMPENADEIRA": ["13. Ferramentas e Utensílios", 1.0, 4], "POLIURETANO": ["14. Materiais", 1.0, 6], "SDS": ["07. Equipamentos e Locações", 0.75, 8], "LAMPADA": ["14. Materiais", 1.0, 16], "PCS": ["06. Alimentação", 1.0, 16], "THOR": ["14. Materiais", 1.0, 7], "NEOMIX": ["12. EPIs e Uniformes", 1.0, 3], "PROMAT": ["12. EPIs e Uniformes", 1.0, 3], "EMBURRACHADO": ["12. EPIs e Uniformes", 1.0, 9], "RETENTOR": ["12. EPIs e Uniformes", 1.0, 10], "VICSA": ["12. EPIs e Uniformes", 1.0, 26], "ABDOMINAL": ["12. EPIs e Uniformes", 1.0, 10], "VIC20829": ["12. EPIs e Uniformes", 1.0, 10], "CINTO": ["12. EPIs e Uniformes", 1.0, 10], "PARAQ": ["12. EPIs e Uniformes", 1.0, 10], "CONE": ["12. EPIs e Uniformes", 1.0, 7], "LIMA": ["09. Escritório e Hospedagem", 0.833, 12], "CAPACETE": ["12. EPIs e Uniformes", 1.0, 6], "HB004570899": ["12. EPIs e Uniformes", 1.0, 6], "H700": ["12. EPIs e Uniformes", 1.0, 6], "MAOS": ["13. Ferramentas e Utensílios", 1.0, 3], "CONCRETO": ["13. Ferramentas e Utensílios", 1.0, 3], "MAXIMA": ["13. Ferramentas e Utensílios", 1.0, 3], "BROCANTE": ["14. Materiais", 1.0, 10], "AUTO": ["14. Materiais", 0.923, 13], "CARVAO": ["14. Materiais", 0.75, 4], "GWS": ["07. Equipamentos e Locações", 1.0, 3], "ESCOVA": ["14. Materiais", 0.75, 4], "ALIFATICO": ["14. Materiais", 1.0, 5], "EMBLEMA": ["14. Materiais", 1.0, 3], "MUNSELL": ["14. Materiais", 1.0, 5], "TRAVA": ["14. Materiais", 0.75, 4], "NAO": ["16. Gastos Gerais", 0.8, 5], "RIBEIRO": ["14. Materiais", 1.0, 4], "SOUZA": ["14. Materiais", 0.8, 5], "PSTRANSPARENTEPCT100UN": ["14. Materiais", 1.0, 3], "JANEIRO": ["02. Impostos", 0.6, 20], "RIO": ["15. Utilidades e Serviços", 0.636, 11], "TORKYS": ["07. Equipamentos e Locações", 1.0, 5], "TELEMETRIA": ["07. Equipamentos e Locações", 1.0, 5], "RASTREADOR": ["07. Equipamentos e Locações", 1.0, 5], "TRABA": ["12. EPIs e Uniformes", 1.0, 3], "MRO": ["12. EPIs e Uniformes", 1.0, 3], "QUALITATIVO": ["12. EPIs e Uniformes", 1.0, 3], "TEST": ["12. EPIs e Uniformes", 1.0, 3], "PROT": ["12. EPIs e Uniformes", 1.0, 3], "ENSAIO": ["12. EPIs e Uniformes", 1.0, 3], "EXPANSIVA": ["14. Materiais", 1.0, 5], "DIFUSOR": ["14. Materiais", 1.0, 3], "CO2": ["14. Materiais", 1.0, 3], "MB8": ["14. Materiais", 1.0, 3], "PERICIAS": ["10. Serviços de Terceiros", 1.0, 7], "TECNICOS": ["10. Serviços de Terceiros", 0.778, 9], "TECNICAS": ["10. Serviços de Terceiros", 1.0, 7], "LAUDOS": ["10. Serviços de Terceiros", 1.0, 7], "CONSERV": ["10. Serviços de Terceiros", 1.0, 3], "BDA": ["14. Materiais", 1.0, 6], "DESBASTE": ["14. Materiais", 1.0, 6], "FONSECA": ["09. Escritório e Hospedagem", 1.0, 10], "CARLA": ["09. Escritório e Hospedagem", 1.0, 10], "FISICA": ["09. Escritório e Hospedagem", 1.0, 7], "CAMILA": ["09. Escritório e Hospedagem", 1.0, 10], "JIC": ["07. Equipamentos e Locações", 1.0, 3], "GIRATORIA": ["07. Equipamentos e Locações", 1.0, 3], "GENERICO": ["14. Materiais", 1.0, 3], "LINGA": ["07. Equipamentos e Locações", 1.0, 6], "GANCHO": ["07. Equipamentos e Locações", 1.0, 6], "RAMAL": ["07. Equipamentos e Locações", 1.0, 6], "LORENZETTI": ["13. Ferramentas e Utensílios", 1.0, 5], "LOREN": ["13. Ferramentas e Utensílios", 1.0, 5], "CHUVEIRO": ["13. Ferramentas e Utensílios", 1.0, 5], "MEDIA": ["13. Ferramentas e Utensílios", 1.0, 3], "PENEIRA": ["13. Ferramentas e Utensílios", 1.0, 3], "ENCAIXE": ["13. Ferramentas e Utensílios", 1.0, 9], "SOQUETE": ["13. Ferramentas e Utensílios", 1.0, 3], "ESTRIADO": ["13. Ferramentas e Utensílios", 1.0, 3], "MONTAR": ["13. Ferramentas e Utensílios", 1.0, 7], "CAVADEIRA": ["13. Ferramentas e Utensílios", 1.0, 7], "ARTICULADA": ["13. Ferramentas e Utensílios", 1.0, 6], "MEXEDOR": ["13. Ferramentas e Utensílios", 1.0, 6], "MAV1600": ["13. Ferramentas e Utensílios", 0.667, 9], "ARGAMASSA": ["13. Ferramentas e Utensílios", 0.667, 9], "M14": ["13. Ferramentas e Utensílios", 1.0, 6], "MISTURADOR": ["13. Ferramentas e Utensílios", 1.0, 6], "GRAMPO": ["13. Ferramentas e Utensílios", 1.0, 6], "SARGENTO": ["13. Ferramentas e Utensílios", 1.0, 6], "METASUL": ["13. Ferramentas e Utensílios", 1.0, 6], "POSITIVO": ["14. Materiais", 1.0, 6], "ILHOS": ["14. Materiais", 1.0, 8], "PENTE": ["14. Materiais", 1.0, 4], "S3F210B": ["14. Materiais", 1.0, 3], "PRANCHETA": ["14. Materiais", 1.0, 3], "PRENDEDOR": ["14. Materiais", 1.0, 3], "ACRIMET": ["14. Materiais", 1.0, 3], "LATA": ["07. Equipamentos e Locações", 1.0, 6], "LEVE": ["07. Equipamentos e Locações", 1.0, 6], "PRENSAVEL": ["07. Equipamentos e Locações", 1.0, 7], "SEALTUBO": ["07. Equipamentos e Locações", 1.0, 3], "TALABARTE": ["12. EPIs e Uniformes", 1.0, 16], "ALMA": ["12. EPIs e Uniformes", 1.0, 8], "ABSORV": ["12. EPIs e Uniformes", 1.0, 8], "POLIESTER": ["12. EPIs e Uniformes", 1.0, 8], "VIC23605": ["12. EPIs e Uniformes", 1.0, 8], "ABSORVEDOR": ["12. EPIs e Uniformes", 1.0, 8], "REPARO": ["07. Equipamentos e Locações", 0.667, 9], "NITRILON": ["12. EPIs e Uniformes", 1.0, 8], "A017718": ["07. Equipamentos e Locações", 1.0, 5], "OXI": ["07. Equipamentos e Locações", 1.0, 5], "RLS": ["14. Materiais", 1.0, 4], "BOB": ["14. Materiais", 1.0, 4], "PREMIUM": ["14. Materiais", 1.0, 4], "INTERMEDIACAO": ["10. Serviços de Terceiros", 1.0, 6], "CORRETAGEM": ["10. Serviços de Terceiros", 1.0, 6], "AGENCIAMENTO": ["10. Serviços de Terceiros", 1.0, 6], "EVELYN": ["07. Equipamentos e Locações", 0.6, 5], "POLO": ["12. EPIs e Uniformes", 1.0, 11], "MASCULINO": ["12. EPIs e Uniformes", 1.0, 6], "FEMININA": ["12. EPIs e Uniformes", 1.0, 5], "FREIO": ["07. Equipamentos e Locações", 1.0, 4], "NUTRIEX": ["14. Materiais", 1.0, 3], "REPELENTE": ["14. Materiais", 1.0, 3], "PROFISSIONAL": ["14. Materiais", 0.75, 4], "INSETOS": ["14. Materiais", 1.0, 3], "CONTECOM": ["14. Materiais", 1.0, 6], "DISTR": ["14. Materiais", 1.0, 6], "SKU": ["14. Materiais", 1.0, 3], "CEGA": ["14. Materiais", 1.0, 3], "INPOL": ["14. Materiais", 1.0, 3], "FUSIVEL": ["14. Materiais", 1.0, 5], "TIGRE": ["14. Materiais", 1.0, 3], "MALOTE": ["14. Materiais", 1.0, 6], "LACRE": ["14. Materiais", 1.0, 6], "NUMERADO": ["14. Materiais", 1.0, 6], "MAKITA": ["07. Equipamentos e Locações", 1.0, 6], "ESTATOR": ["07. Equipamentos e Locações", 1.0, 3], "MVS": ["07. Equipamentos e Locações", 1.0, 5], "ONEEL": ["07. Equipamentos e Locações", 1.0, 5], "ARGAMASSADEIRA": ["14. Materiais", 1.0, 3], "LIVRO": ["14. Materiais", 1.0, 3], "PROTOCOLO": ["14. Materiais", 1.0, 3], "FOSCO": ["14. Materiais", 1.0, 7], "R664": ["14. Materiais", 1.0, 7], "AC2": ["14. Materiais", 1.0, 3], "INTERNO": ["14. Materiais", 1.0, 3], "EXTERNO": ["14. Materiais", 1.0, 3], "REJUNTE": ["14. Materiais", 1.0, 3], "BEGE": ["14. Materiais", 1.0, 3], "CERAMICO": ["14. Materiais", 1.0, 3], "ESPACADOR": ["14. Materiais", 1.0, 3], "PHILIPS": ["13. Ferramentas e Utensílios", 1.0, 3], "FECHO": ["14. Materiais", 1.0, 3], "DOBRADICA": ["14. Materiais", 1.0, 3], "SAIDAS": ["14. Materiais", 1.0, 3], "ENCARGOS": ["16. Gastos Gerais", 1.0, 45], "AMORTIZACAO": ["16. Gastos Gerais", 1.0, 45], "DEPRECIACAO": ["16. Gastos Gerais", 1.0, 45], "MENSALIDADE": ["05. Saúde", 1.0, 39], "PARTICIPACAO": ["05. Saúde", 1.0, 24], "ODONTOLOGICO": ["05. Saúde", 1.0, 36], "OBRAS": ["06. Alimentação", 1.0, 20], "CRACHA": ["12. EPIs e Uniformes", 1.0, 7], "EXTRAVIADO": ["12. EPIs e Uniformes", 1.0, 7], "DESC": ["08. Veículos e Locações", 1.0, 5], "ADMINISTRATIVAS": ["08. Veículos e Locações", 1.0, 5], "BL3": ["15. Utilidades e Serviços", 0.875, 8], "SANEAMENTO": ["15. Utilidades e Serviços", 0.875, 8], "CONDOMINIO": ["09. Escritório e Hospedagem", 1.0, 7], "EVENTUAIS": ["16. Gastos Gerais", 1.0, 22], "BANCARIAS": ["16. Gastos Gerais", 1.0, 30], "PEDAGIOS": ["08. Veículos e Locações", 1.0, 9], "ESTACIONAMENTO": ["08. Veículos e Locações", 1.0, 9], "VIDA": ["05. Saúde", 1.0, 24], "SEGURO": ["16. Gastos Gerais", 0.571, 56], "PREVIDENCIA": ["05. Saúde", 1.0, 24], "MOBI": ["04. Transporte de Pessoal", 1.0, 18], "TAXAS": ["09. Escritório e Hospedagem", 0.857, 14], "IPTU": ["09. Escritório e Hospedagem", 1.0, 12], "FUNCIONA": ["09. Escritório e Hospedagem", 1.0, 12], "TERNIUM": ["02. Impostos", 0.897, 117], "INSTITUICAO": ["16. Gastos Gerais", 1.0, 5], "NAIP": ["16. Gastos Gerais", 1.0, 5], "REEMBOLSO": ["04. Transporte de Pessoal", 1.0, 12], "GARCIA": ["04. Transporte de Pessoal", 1.0, 9], "RICARDO": ["04. Transporte de Pessoal", 1.0, 9], "SOUTO": ["04. Transporte de Pessoal", 1.0, 7], "MARCELO": ["04. Transporte de Pessoal", 1.0, 7], "CASTRO": ["04. Transporte de Pessoal", 1.0, 5], "OLIVEIRA": ["04. Transporte de Pessoal", 1.0, 5], "REVERSAO": ["02. Impostos", 1.0, 27], "ANTECIPADAS": ["02. Impostos", 1.0, 49], "FATURAMENTO": ["02. Impostos", 1.0, 51], "DEZEMBRO": ["02. Impostos", 1.0, 9], "PIS": ["02. Impostos", 1.0, 51], "RECEITAS": ["02. Impostos", 1.0, 49], "CUMULATIVO": ["02. Impostos", 1.0, 102], "SOBRE": ["02. Impostos", 1.0, 83], "COFINS": ["02. Impostos", 1.0, 51], "ISSQN": ["02. Impostos", 1.0, 51], "ISS": ["02. Impostos", 1.0, 16], "RECUPERACAO": ["06. Alimentação", 1.0, 15], "RECLASSIFICACAO": ["06. Alimentação", 0.938, 16], "RECEBIMENTO": ["06. Alimentação", 1.0, 15], "COMPETENCIA": ["02. Impostos", 1.0, 18], "RESPONSABILIDADE": ["16. Gastos Gerais", 1.0, 32], "CIVIL": ["16. Gastos Gerais", 1.0, 32], "APROPRIACAO": ["16. Gastos Gerais", 1.0, 30], "SEGUROS": ["16. Gastos Gerais", 1.0, 30], "RESULTADO": ["16. Gastos Gerais", 1.0, 30], "FAFFE": ["04. Transporte de Pessoal", 1.0, 3], "JAIME": ["04. Transporte de Pessoal", 1.0, 3], "BRITO": ["04. Transporte de Pessoal", 1.0, 3], "XAVIER": ["04. Transporte de Pessoal", 1.0, 3], "FEVEREIRO": ["02. Impostos", 0.842, 19], "RESULTADOCOMP": ["10. Serviços de Terceiros", 1.0, 11], "COMPUTACAOTRANSFERIDO": ["10. Serviços de Terceiros", 1.0, 11], "MARCO": ["02. Impostos", 0.667, 9], "CLIENTES": ["16. Gastos Gerais", 1.0, 7], "PELOS": ["16. Gastos Gerais", 1.0, 7], "PENALIDADES": ["16. Gastos Gerais", 1.0, 7], "APLICADAS": ["16. Gastos Gerais", 1.0, 7], "ABRIL": ["06. Alimentação", 1.0, 3], "CANCELAMENTO": ["02. Impostos", 1.0, 4], "MAIO": ["06. Alimentação", 1.0, 3], "JUNHO": ["02. Impostos", 1.0, 6], "RATEIO": ["16. Gastos Gerais", 1.0, 44]}</script>
+<script>
+/* ==========================================================================
+   LANÇAMENTOS DE SUPRIMENTOS — lógica
+   (adaptado ao backend simplificado: doGet devolve array puro,
+   doPost espera { ID, LANÇAMENTO, DATA_PAGAMENTO, VALOR, OBSERVAÇÃO, GRUPO })
+   ========================================================================== */
 
-    // Aplica máscara 00000-000 e dispara a busca automática ao completar o CEP
-    function onCepInput(input) {
-      let v = input.value.replace(/\D/g, '').slice(0, 8);
-      input.value = v.length > 5 ? v.slice(0, 5) + '-' + v.slice(5) : v;
+// URL da própria plataforma de Lançamentos (onde os dados são gravados)
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvhIH8lz0rnXTupAFtDWxI9AAP53u61ww1hhpwDBqn-z0jFnFEOn83kWt-dF8QMjgjnw/exec';
 
-      const cepStatus = document.getElementById('cepStatus');
-      cepStatus.textContent = '';
-      cepStatus.style.display = 'none';
+// URL do serviço de LOGIN (Apps Script dedicado, planilha própria de credenciais)
+const URL_PLATAFORMA_NOMES = 'https://script.google.com/macros/s/AKfycbwW7R25FRajkf2ol2E32YJy9PgQ3mZTDosLbloW2B1M-HinrV18BdI7jiMmQT0W3vIdxw/exec';
 
-      if (v.length === 8) {
-        buscarEnderecoPorCep(v);
+const state = { usuario: null };
+
+const GRUPOS_DESPESA = [
+  '02. Impostos','03. Pessoal + Encargos','04. Transporte de Pessoal','05. Saúde','06. Alimentação',
+  '07. Equipamentos e Locações','08. Veículos e Locações','09. Escritório e Hospedagem',
+  '10. Serviços de Terceiros','11. Fretes e Carretos','12. EPIs e Uniformes','13. Ferramentas e Utensílios',
+  '14. Materiais','15. Utilidades e Serviços','16. Gastos Gerais'
+];
+
+const CLASSIFICADOR = JSON.parse(document.getElementById('classificador-dados').textContent);
+
+const fmtBRL = (v) => (v || 0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+
+function normalizarTexto(txt) {
+  const s = String(txt || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return s.match(/[A-Z][A-Z0-9]{2,}/g) || [];
+}
+
+function classificar(texto) {
+  const tokens = normalizarTexto(texto);
+  const scores = {};
+  tokens.forEach(tok => {
+    const entry = CLASSIFICADOR[tok];
+    if (entry) {
+      const [g, conf, n] = entry;
+      scores[g] = (scores[g] || 0) + conf * Math.log(1 + n);
+    }
+  });
+  const pares = Object.entries(scores);
+  if (!pares.length) return { grupo: null, confianca: 0 };
+  pares.sort((a, b) => b[1] - a[1]);
+  const total = pares.reduce((s, [, v]) => s + v, 0);
+  return { grupo: pares[0][0], confianca: total ? pares[0][1] / total : 0 };
+}
+
+function gerarId() {
+  return 'L' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+
+/* ---------------------------------------------------------------------- */
+/* COMUNICAÇÃO COM O APPS SCRIPT */
+/* ---------------------------------------------------------------------- */
+function postJson(url, payload, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+    signal: controller.signal
+  })
+    .then(r => { clearTimeout(timeoutId); if (!r.ok) throw new Error('Servidor respondeu ' + r.status); return r.json(); })
+    .catch(err => { clearTimeout(timeoutId); if (err.name === 'AbortError') throw new Error('Tempo esgotado (15s).'); throw err; });
+}
+
+function getJson(url, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { method: 'GET', signal: controller.signal })
+    .then(r => { clearTimeout(timeoutId); if (!r.ok) throw new Error('Servidor respondeu ' + r.status); return r.json(); })
+    .catch(err => { clearTimeout(timeoutId); if (err.name === 'AbortError') throw new Error('Tempo esgotado (15s).'); throw err; });
+}
+
+/* ---------------------------------------------------------------------- */
+/* LOGIN (usa a Plataforma de Nomes / Login dedicado — protocolo com "acao") */
+/* ---------------------------------------------------------------------- */
+document.getElementById('btnLogin').onclick = () => {
+  const matricula = document.getElementById('loginMatricula').value.trim();
+  const senha = document.getElementById('loginSenha').value;
+  const msg = document.getElementById('msgLogin');
+  msg.className = 'msg';
+  document.getElementById('blocoCriarSenha').classList.add('hidden');
+
+  if (!matricula || !senha) {
+    msg.className = 'msg erro';
+    msg.textContent = 'Informe matrícula e senha.';
+    return;
+  }
+
+  postJson(URL_PLATAFORMA_NOMES, { acao: 'login', matricula, senha })
+    .then(resp => {
+      if (resp.sucesso) {
+        autenticar(resp.nome, matricula);
+      } else if (resp.precisaCriarSenha) {
+        msg.className = 'msg';
+        msg.textContent = `Olá, ${resp.nome}. Primeiro acesso — crie sua senha abaixo.`;
+        document.getElementById('blocoCriarSenha').classList.remove('hidden');
+      } else {
+        msg.className = 'msg erro';
+        msg.textContent = resp.erro || 'Não foi possível entrar.';
       }
-    }
+    })
+    .catch(err => { msg.className = 'msg erro'; msg.textContent = 'Erro ao entrar: ' + err.message; });
+};
 
-    function buscarEnderecoPorCep(cepLimpo) {
-      const cepStatus = document.getElementById('cepStatus');
-      cepStatus.textContent = 'Buscando endereço...';
-      cepStatus.style.display = 'block';
+document.getElementById('linkCriarSenha').onclick = (ev) => {
+  ev.preventDefault();
+  const bloco = document.getElementById('blocoCriarSenha');
+  bloco.classList.toggle('hidden');
+  document.getElementById('msgLogin').className = 'msg';
+  if (!bloco.classList.contains('hidden')) {
+    document.getElementById('novaSenha').focus();
+  }
+};
 
-      fetch('https://viacep.com.br/ws/' + cepLimpo + '/json/')
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-          cepStatus.style.display = 'none';
+document.getElementById('btnCriarSenha').onclick = () => {
+  const matricula = document.getElementById('loginMatricula').value.trim();
+  const nova = document.getElementById('novaSenha').value;
+  const confirma = document.getElementById('confirmaSenha').value;
+  const msg = document.getElementById('msgLogin');
 
-          if (data.erro) {
-            cepStatus.textContent = 'CEP não encontrado. Preencha o endereço manualmente.';
-            cepStatus.style.display = 'block';
-            return;
-          }
+  if (nova.length < 4) { msg.className = 'msg erro'; msg.textContent = 'A senha deve ter pelo menos 4 caracteres.'; return; }
+  if (nova !== confirma) { msg.className = 'msg erro'; msg.textContent = 'As senhas não coincidem.'; return; }
 
-          // Preenche os campos — o colaborador ainda pode editar qualquer um deles.
-          document.getElementById('logradouro').value = data.logradouro || '';
-          document.getElementById('bairro').value = data.bairro || '';
-          document.getElementById('cidade').value = data.localidade || '';
-          document.getElementById('estado').value = data.uf || '';
-          document.getElementById('numero').focus();
-        })
-        .catch(function() {
-          cepStatus.textContent = 'Não foi possível buscar o CEP agora. Preencha manualmente.';
-          cepStatus.style.display = 'block';
-        });
-    }
+  postJson(URL_PLATAFORMA_NOMES, { acao: 'definirSenha', matricula, novaSenha: nova })
+    .then(resp => {
+      if (resp.sucesso) autenticar(resp.nome, matricula);
+      else { msg.className = 'msg erro'; msg.textContent = resp.erro || 'Não foi possível criar a senha.'; }
+    })
+    .catch(err => { msg.className = 'msg erro'; msg.textContent = 'Erro: ' + err.message; });
+};
 
-    function chamarServidor(payload) {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(function() { controller.abort(); }, TIMEOUT_MS);
+document.getElementById('btnSair').onclick = (ev) => {
+  ev.preventDefault();
+  state.usuario = null;
+  document.getElementById('conteudoPrincipal').classList.add('hidden');
+  document.getElementById('nomeLogadoWrap').style.display = 'none';
+  document.getElementById('cardLogin').classList.remove('hidden');
+  document.getElementById('loginSenha').value = '';
+  document.getElementById('msgLogin').className = 'msg';
+};
 
-      return fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload),
-        signal: controller.signal
-      })
-        .then(function(r) {
-          clearTimeout(timeoutId);
-          if (!r.ok) {
-            throw new Error('Servidor respondeu com status ' + r.status);
-          }
-          return r.json();
-        })
-        .catch(function(err) {
-          clearTimeout(timeoutId);
-          if (err.name === 'AbortError') {
-            throw new Error('Tempo esgotado (15s). Verifique sua conexão ou tente novamente.');
-          }
-          throw err;
-        });
-    }
+function autenticar(nome, matricula) {
+  state.usuario = { nome, matricula };
+  document.getElementById('cardLogin').classList.add('hidden');
+  document.getElementById('conteudoPrincipal').classList.remove('hidden');
+  document.getElementById('nomeLogadoWrap').style.display = 'inline';
+  document.getElementById('nomeLogado').textContent = nome;
+  document.getElementById('lancadoPor').value = nome;
+  montarSelects();
+  carregarResumo();
+}
 
-    function buscar() {
-      const matricula = document.getElementById('matricula').value.trim();
-      const erro = document.getElementById('erro1');
-      erro.style.display = 'none';
+/* ---------------------------------------------------------------------- */
+/* MONTAGEM DA UI */
+/* ---------------------------------------------------------------------- */
+function montarSelects() {
+  const selGrupo = document.getElementById('grupoMacro');
+  selGrupo.innerHTML = '';
+  const optVazia = document.createElement('option'); optVazia.value = ''; optVazia.textContent = '— selecione —';
+  selGrupo.appendChild(optVazia);
+  GRUPOS_DESPESA.forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; selGrupo.appendChild(o); });
 
-      if (!matricula) {
-        erro.textContent = 'Digite sua matrícula.';
-        erro.style.display = 'block';
-        return;
+  document.getElementById('dataPrevista').value = new Date().toISOString().slice(0, 10);
+}
+
+/**
+ * Combina descrição + fornecedor: usa os dois para classificar (fornecedor é
+ * um sinal forte — ex: "Amil"/"Unimed" indicam Saúde) e monta o texto final
+ * que vai para a coluna LANÇAMENTO, sem perder o nome do fornecedor.
+ */
+function montarLancamento_(descricao, fornecedor) {
+  const textoClassificar = [descricao, fornecedor].filter(Boolean).join(' ');
+  const textoLancamento = fornecedor ? `${descricao} — ${fornecedor}` : descricao;
+  return { textoClassificar, textoLancamento };
+}
+
+let debounceClassificar;
+function agendarClassificacao() {
+  clearTimeout(debounceClassificar);
+  debounceClassificar = setTimeout(() => {
+    const descricao = document.getElementById('descricao').value;
+    const fornecedor = document.getElementById('fornecedor').value;
+    aplicarSugestao(montarLancamento_(descricao, fornecedor).textoClassificar);
+  }, 300);
+}
+document.getElementById('descricao').addEventListener('input', agendarClassificacao);
+document.getElementById('fornecedor').addEventListener('input', agendarClassificacao);
+
+function aplicarSugestao(texto) {
+  const box = document.getElementById('sugestaoBox');
+  const sel = document.getElementById('grupoMacro');
+  if (!texto || texto.trim().length < 3) { box.className = 'sugestao vazio'; return; }
+
+  const { grupo, confianca } = classificar(texto);
+  if (!grupo) {
+    box.className = 'sugestao duvida';
+    box.textContent = '🤔 Não identifiquei automaticamente — selecione o grupo manualmente.';
+    return;
+  }
+  sel.value = grupo;
+  if (confianca >= 0.6) {
+    box.className = 'sugestao ok';
+    box.textContent = `✓ Classificado automaticamente como "${grupo}". Confira e ajuste se necessário.`;
+  } else {
+    box.className = 'sugestao duvida';
+    box.textContent = `🤔 Sugestão com baixa confiança: "${grupo}". Confirme se está correto.`;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* ENVIO DO LANÇAMENTO */
+/* ---------------------------------------------------------------------- */
+document.getElementById('btnLancar').onclick = () => {
+  const lancadoPor = document.getElementById('lancadoPor').value.trim();
+  const dataPagamento = document.getElementById('dataPrevista').value;
+  const descricao = document.getElementById('descricao').value.trim();
+  const fornecedor = document.getElementById('fornecedor').value.trim();
+  const grupo = document.getElementById('grupoMacro').value;
+  const valor = parseFloat(document.getElementById('valor').value);
+  const observacao = document.getElementById('observacao').value.trim();
+
+  const msg = document.getElementById('msgForm');
+  msg.className = 'msg';
+
+  if (!dataPagamento || !descricao || !grupo || !(valor > 0)) {
+    msg.className = 'msg erro';
+    msg.textContent = 'Preencha data, descrição, grupo de conta e um valor maior que zero.';
+    return;
+  }
+
+  // O backend atual não tem coluna própria para "quem lançou" — guardamos essa
+  // informação como prefixo da observação, para não perder o rastro de autoria.
+  const observacaoFinal = `[Lançado por: ${lancadoPor}]` + (observacao ? ' ' + observacao : '');
+  const { textoLancamento } = montarLancamento_(descricao, fornecedor);
+
+  const payload = {
+    ID: gerarId(),
+    'LANÇAMENTO': textoLancamento,
+    DATA_PAGAMENTO: dataPagamento,
+    VALOR: valor,
+    'OBSERVAÇÃO': observacaoFinal,
+    GRUPO: grupo
+  };
+
+  const btn = document.getElementById('btnLancar');
+  btn.disabled = true; btn.textContent = 'Lançando…';
+
+  postJson(SCRIPT_URL, payload)
+    .then(resp => {
+      btn.disabled = false; btn.textContent = 'Lançar despesa';
+      if (resp && (resp.status === 'sucesso' || resp.sucesso)) {
+        msg.className = 'msg sucesso';
+        msg.textContent = '✓ Despesa lançada com sucesso.';
+        document.getElementById('descricao').value = '';
+        document.getElementById('fornecedor').value = '';
+        document.getElementById('grupoMacro').value = '';
+        document.getElementById('valor').value = '';
+        document.getElementById('observacao').value = '';
+        document.getElementById('sugestaoBox').className = 'sugestao vazio';
+        carregarResumo();
+      } else {
+        msg.className = 'msg erro';
+        msg.textContent = (resp && resp.erro) || 'Erro ao lançar.';
       }
+    })
+    .catch(err => {
+      btn.disabled = false; btn.textContent = 'Lançar despesa';
+      msg.className = 'msg erro';
+      msg.textContent = 'Erro ao enviar: ' + err.message;
+    });
+};
 
-      document.getElementById('btnBuscar').disabled = true;
-      document.getElementById('spinner1').style.display = 'block';
+/* ---------------------------------------------------------------------- */
+/* RESUMO E LISTA DE RECENTES */
+/* ---------------------------------------------------------------------- */
+function mesAtualChave() {
+  const hoje = new Date();
+  return hoje.getFullYear() + '-' + String(hoje.getMonth() + 1).padStart(2, '0');
+}
+function dataChave(d) {
+  const dt = (d instanceof Date) ? d : new Date(d);
+  if (isNaN(dt)) return '';
+  return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0');
+}
+function ehHoje(d) {
+  const dt = (d instanceof Date) ? d : new Date(d);
+  if (isNaN(dt)) return false;
+  const hoje = new Date();
+  return dt.getFullYear() === hoje.getFullYear() && dt.getMonth() === hoje.getMonth() && dt.getDate() === hoje.getDate();
+}
 
-      chamarServidor({ acao: 'buscar', matricula: matricula })
-        .then(function(resp) {
-          document.getElementById('btnBuscar').disabled = false;
-          document.getElementById('spinner1').style.display = 'none';
+function carregarResumo() {
+  getJson(SCRIPT_URL)
+    .then(linhas => {
+      if (!Array.isArray(linhas)) linhas = [];
+      const mesAtual = mesAtualChave();
 
-          if (resp.erro) {
-            erro.textContent = resp.erro;
-            erro.style.display = 'block';
-            return;
-          }
+      let totalMes = 0, countMes = 0, totalHoje = 0;
+      linhas.forEach(l => {
+        const chaveData = dataChave(l.DATA_PAGAMENTO);
+        const valor = Number(l.VALOR) || 0;
+        if (chaveData === mesAtual) { totalMes += valor; countMes++; }
+        if (ehHoje(l.DATA_PAGAMENTO)) totalHoje += valor;
+      });
 
-          if (resp.encontrado) {
-            matriculaAtual = matricula;
-            document.getElementById('nomeColaborador').textContent = 'Colaborador: ' + resp.nome;
-            document.getElementById('etapa1').classList.add('hidden');
-            document.getElementById('etapa2').classList.remove('hidden');
-          } else {
-            erro.textContent = 'Matrícula não encontrada. Verifique o número digitado.';
-            erro.style.display = 'block';
-          }
-        })
-        .catch(function(e) {
-          document.getElementById('btnBuscar').disabled = false;
-          document.getElementById('spinner1').style.display = 'none';
-          erro.textContent = 'Erro ao verificar matrícula: ' + e.message;
-          erro.style.display = 'block';
-        });
+      document.getElementById('kpiTotalMes').textContent = fmtBRL(totalMes);
+      document.getElementById('kpiCountMes').textContent = countMes.toLocaleString('pt-BR');
+      document.getElementById('kpiHoje').textContent = fmtBRL(totalHoje);
+      document.getElementById('subtitulo').textContent = `${linhas.length} lançamento(s) na base`;
+
+      const recentes = linhas.slice().reverse().slice(0, 20);
+      const wrap = document.getElementById('tabelaRecentesWrap');
+      if (!recentes.length) { wrap.innerHTML = '<div class="empty-state">Nenhum lançamento ainda.</div>'; return; }
+
+      let html = '<table class="tbl"><thead><tr><th>Data</th><th>Descrição</th><th>Grupo</th><th style="text-align:right;">Valor</th></tr></thead><tbody>';
+      recentes.forEach(l => {
+        const dt = l.DATA_PAGAMENTO ? new Date(l.DATA_PAGAMENTO) : null;
+        const dataFmt = dt && !isNaN(dt) ? dt.toLocaleDateString('pt-BR') : '—';
+        html += `<tr>
+          <td>${dataFmt}</td>
+          <td class="txt">${escapeHtml(l['LANÇAMENTO'] || '')}</td>
+          <td class="txt">${escapeHtml((l.GRUPO || '').replace(/^\d+\.\s*/, ''))}</td>
+          <td class="valor-col">${fmtBRL(Number(l.VALOR) || 0)}</td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      wrap.innerHTML = html;
+    })
+    .catch(err => {
+      document.getElementById('subtitulo').textContent = 'Erro ao carregar dados: ' + err.message;
+    });
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+/* ---------------------------------------------------------------------- */
+/* TEMA */
+/* ---------------------------------------------------------------------- */
+document.getElementById('btnTema').onclick = () => {
+  const atual = document.documentElement.getAttribute('data-theme');
+  const novo = atual === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', novo);
+  document.getElementById('btnTema').textContent = novo === 'dark' ? '☀️' : '🌙';
+};
+
+/* ---------------------------------------------------------------------- */
+/* LANÇAMENTO EM LOTE (planilha Excel) */
+/* ---------------------------------------------------------------------- */
+function baixarModelo() {
+  const wb = XLSX.utils.book_new();
+  const cabecalho = ['Descrição', 'Data (DD/MM/AAAA)', 'Valor (ex: 1500,00)', 'Fornecedor'];
+  const exemplo1 = ['Compra de luvas de proteção para soldadores', '20/07/2026', '350,50', 'ACME EPIs Ltda'];
+  const exemplo2 = ['Mensalidade plano de saúde', '10/07/2026', '1200,00', 'Unimed'];
+  const ws = XLSX.utils.aoa_to_sheet([cabecalho, exemplo1, exemplo2]);
+  ws['!cols'] = [{ wch: 48 }, { wch: 20 }, { wch: 18 }, { wch: 30 }];
+  XLSX.utils.book_append_sheet(wb, ws, 'Lançamentos');
+
+  XLSX.writeFile(wb, 'modelo_lancamentos_suprimentos.xlsx');
+}
+
+function mapearLinhaPlanilha_(row) {
+  let descricao = '', data = '', valor = '', fornecedor = '';
+  Object.keys(row).forEach(k => {
+    const nk = normalizarTexto(k).join(' ');
+    if (nk.indexOf('DESCRI') !== -1) descricao = row[k];
+    else if (nk.indexOf('DATA') !== -1) data = row[k];
+    else if (nk.indexOf('VALOR') !== -1) valor = row[k];
+    else if (nk.indexOf('FORNECED') !== -1) fornecedor = row[k];
+  });
+  return { descricao, data, valor, fornecedor };
+}
+
+/**
+ * Aceita data já como objeto Date (Excel), número de série do Excel,
+ * ou texto em DD/MM/AAAA (formato brasileiro) — nessa ordem de tentativa,
+ * para não interpretar "10/07/2026" como 10 de julho ao inves de 7 de outubro.
+ */
+function formatarDataISO_(v) {
+  if (v instanceof Date && !isNaN(v)) return v.toISOString().slice(0, 10);
+
+  if (typeof v === 'number') {
+    const dias = Math.floor(v - 25569);
+    const d = new Date(dias * 86400 * 1000);
+    if (!isNaN(d)) return d.toISOString().slice(0, 10);
+  }
+
+  const s = String(v || '').trim();
+  const brMatch = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+  if (brMatch) {
+    let [, dia, mes, ano] = brMatch;
+    if (ano.length === 2) ano = '20' + ano;
+    const iso = `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+    const d = new Date(iso);
+    if (!isNaN(d)) return iso;
+  }
+
+  const isoMatch = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (isoMatch) {
+    const d = new Date(s);
+    if (!isNaN(d)) return `${isoMatch[1]}-${isoMatch[2].padStart(2, '0')}-${isoMatch[3].padStart(2, '0')}`;
+  }
+
+  return '';
+}
+
+/**
+ * Aceita valor em formato brasileiro (1.234,56 ou 1234,56) ou já em formato
+ * numérico simples (1234.56) — detecta pela presença de vírgula.
+ */
+function parseValorBR_(v) {
+  if (typeof v === 'number') return v;
+  let s = String(v || '').trim();
+  if (!s) return NaN;
+  if (s.indexOf(',') !== -1) {
+    s = s.replace(/\./g, '').replace(',', '.');
+  }
+  return parseFloat(s);
+}
+
+async function processarPlanilha(file) {
+  const msg = document.getElementById('msgLote');
+  const resumoWrap = document.getElementById('resumoLoteWrap');
+  const track = document.getElementById('progressoLoteTrack');
+  const fill = document.getElementById('progressoLoteFill');
+  msg.className = 'msg'; resumoWrap.innerHTML = '';
+
+  let linhasBrutas;
+  try {
+    const buffer = await file.arrayBuffer();
+    const wb = XLSX.read(buffer, { type: 'array', cellDates: true });
+    linhasBrutas = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
+  } catch (err) {
+    msg.className = 'msg erro'; msg.textContent = 'Não consegui ler o arquivo: ' + err.message;
+    return;
+  }
+
+  const linhas = linhasBrutas.map(mapearLinhaPlanilha_).filter(l => l.descricao && String(l.descricao).trim());
+  if (!linhas.length) {
+    msg.className = 'msg erro'; msg.textContent = 'Não encontrei nenhuma linha com descrição preenchida.';
+    return;
+  }
+
+  track.style.display = 'block'; fill.style.width = '0%';
+  let ok = 0, falha = 0; const avisos = [];
+
+  for (let i = 0; i < linhas.length; i++) {
+    const l = linhas[i];
+    fill.style.width = Math.round((i / linhas.length) * 100) + '%';
+
+    const descricao = String(l.descricao).trim();
+    const fornecedor = String(l.fornecedor || '').trim();
+    const valor = parseValorBR_(l.valor);
+    const dataISO = formatarDataISO_(l.data) || new Date().toISOString().slice(0, 10);
+
+    const { textoClassificar, textoLancamento } = montarLancamento_(descricao, fornecedor);
+    const sug = classificar(textoClassificar);
+    const grupo = sug.grupo || null;
+
+    if (!(valor > 0) || !grupo) {
+      falha++;
+      avisos.push(`Linha ${i + 2}: ${!(valor > 0) ? 'valor inválido' : ''} ${!grupo ? 'não foi possível classificar automaticamente' : ''} — "${descricao.slice(0, 50)}"`);
+      continue;
     }
 
-    function salvar() {
-      const cep = document.getElementById('cep').value.trim();
-      const logradouro = document.getElementById('logradouro').value.trim();
-      const numero = document.getElementById('numero').value.trim();
-      const complemento = document.getElementById('complemento').value.trim();
-      const bairro = document.getElementById('bairro').value.trim();
-      const cidade = document.getElementById('cidade').value.trim();
-      const estado = document.getElementById('estado').value.trim();
+    const nomeUsuario = state.usuario ? state.usuario.nome : '';
+    const observacaoFinal = `[Lançado por: ${nomeUsuario}] (grupo classificado automaticamente, confiança ${(sug.confianca * 100).toFixed(0)}%)`;
 
-      const erro = document.getElementById('erro2');
-      erro.style.display = 'none';
-
-      if (!logradouro || !numero || !bairro || !cidade || !estado) {
-        erro.textContent = 'Preencha todos os campos obrigatórios.';
-        erro.style.display = 'block';
-        return;
-      }
-
-      const enderecoCompleto =
-        logradouro + ', ' + numero +
-        (complemento ? ' - ' + complemento : '') +
-        ' - ' + bairro + ' - ' + cidade + '/' + estado +
-        (cep ? ' - CEP ' + cep : '');
-
-      document.getElementById('btnSalvar').disabled = true;
-      document.getElementById('spinner2').style.display = 'block';
-
-      chamarServidor({ acao: 'salvar', matricula: matriculaAtual, endereco: enderecoCompleto })
-        .then(function(resp) {
-          document.getElementById('btnSalvar').disabled = false;
-          document.getElementById('spinner2').style.display = 'none';
-
-          if (resp.sucesso) {
-            document.getElementById('etapa2').classList.add('hidden');
-            document.getElementById('etapa3').classList.remove('hidden');
-            document.getElementById('msgSucesso').textContent =
-              'Endereço salvo com sucesso para ' + resp.nome + '.';
-          } else {
-            erro.textContent = resp.erro || 'Erro ao salvar endereço.';
-            erro.style.display = 'block';
-          }
-        })
-        .catch(function(e) {
-          document.getElementById('btnSalvar').disabled = false;
-          document.getElementById('spinner2').style.display = 'none';
-          erro.textContent = 'Erro ao salvar: ' + e.message;
-          erro.style.display = 'block';
-        });
+    try {
+      const resp = await postJson(SCRIPT_URL, {
+        ID: gerarId(),
+        'LANÇAMENTO': textoLancamento,
+        DATA_PAGAMENTO: dataISO,
+        VALOR: valor,
+        'OBSERVAÇÃO': observacaoFinal,
+        GRUPO: grupo
+      });
+      if (resp && (resp.status === 'sucesso' || resp.sucesso)) ok++;
+      else { falha++; avisos.push(`Linha ${i + 2}: servidor recusou — "${descricao.slice(0, 50)}"`); }
+    } catch (err) {
+      falha++; avisos.push(`Linha ${i + 2}: erro de envio — ${err.message}`);
     }
+  }
 
-    function voltar() {
-      document.getElementById('etapa2').classList.add('hidden');
-      document.getElementById('etapa1').classList.remove('hidden');
-    }
-  </script>
+  fill.style.width = '100%';
+  setTimeout(() => { track.style.display = 'none'; }, 600);
+
+  msg.className = falha ? 'msg erro' : 'msg sucesso';
+  msg.textContent = `Processamento concluído: ${ok} lançado(s), ${falha} com problema.`;
+
+  if (avisos.length) {
+    resumoWrap.innerHTML = '<p class="footnote"><b>Linhas que precisam de atenção:</b></p><ul class="footnote">'
+      + avisos.map(a => `<li>${escapeHtml(a)}</li>`).join('') + '</ul>';
+  }
+
+  carregarResumo();
+}
+
+document.getElementById('btnBaixarModelo').onclick = baixarModelo;
+document.getElementById('btnEnviarPlanilha').onclick = () => document.getElementById('inputPlanilhaLote').click();
+document.getElementById('inputPlanilhaLote').onchange = (e) => {
+  if (e.target.files[0]) processarPlanilha(e.target.files[0]);
+  e.target.value = '';
+};
+
+/* ---------------------------------------------------------------------- */
+/* INICIALIZAÇÃO */
+/* ---------------------------------------------------------------------- */
+document.getElementById('loginMatricula').focus();
+
+</script>
 </body>
 </html>
